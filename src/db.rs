@@ -2,7 +2,8 @@ use std::fs::File;
 
 use axum::async_trait;
 use chrono::{DateTime, Utc};
-use sqlx::{ Pool, Postgres};
+
+use sqlx::{Pool, Postgres};
 use uuid::Uuid;
 
 use crate::model::{ReciveFileDetails, SendFileDetails, ShareLink, User};
@@ -90,4 +91,85 @@ async fn get_shared(
     &self
  ) -> Result<(), sqlx::Error>;
 
+}
+
+#[async_trait]
+impl UserExt for DbCLient {
+    async fn get_user(
+        &self,
+        user_id: Option<Uuid>,
+        name: Option<&str>,
+        email: Option<&str>,
+    ) -> Result<Option<User>, sqlx::Error> {
+        let mut user: Option<User> = None;
+
+        if let Some(user_id) = user_id {
+            user = sqlx::query_as!(
+                User,
+                r#"SELECT id, name, email, password, public_key, created_at, updated_at FROM users WHERE id = $1"#,
+                user_id
+            )
+            .fetch_optional(&self.pool)
+            .await?;
+        } else if let Some(name) = name {
+            user = sqlx::query_as!(
+                User,
+                r#"SELECT id, name, email, password, public_key, created_at, updated_at FROM users WHERE name = $1"#,
+                name
+            )
+            .fetch_optional(&self.pool)
+            .await?;
+        } else if let Some(email) = email {
+            user = sqlx::query_as!(
+                User,
+                r#"SELECT id, name, email, password, public_key, created_at, updated_at FROM users WHERE email = $1"#,
+                email
+            )
+            .fetch_optional(&self.pool)
+            .await?;
+        }
+
+        Ok(user)
+    }
+
+    async fn save_user<T: Into<String> + Send>(
+        &self,
+        name: T,
+        email: T,
+        password: T,
+    ) -> Result<User, sqlx::Error> {
+        let user = sqlx::query_as!(
+            User,
+            r#"
+            INSERT INTO users (name, email, password)
+            VALUES ($1, $2, $3)
+            RETURNING id, name, email, password, public_key, created_at, updated_at
+            "#,
+            name.into(),
+            email.into(),
+            password.into()
+        )
+        .fetch_one(&self.pool)
+        .await?;
+
+        Ok(user)
+    }
+
+    async fn update_user_name<T: Into<String> + Send> (
+        &self,
+        user_id: Uuid,
+        new_name: T,
+    ) -> Result<User, sqlx::Error>  {
+        let user = sqlx::query_as!(
+           User,
+           r#"
+            UPDATE users
+            SET name = $1, updated_at = Now()
+            WHERE id = $2
+            RETURNING id, name, email, password, public_key, created_at, updated_at
+           "#,
+           new_name.into(),
+           user_id
+        ).
+    }
 }
