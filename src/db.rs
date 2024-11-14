@@ -50,7 +50,7 @@ pub trait UserExt {
 
     async fn save_user_key(&self, user_id: Uuid, public_key: String) -> Result<(), sqlx::Error>;
 
-    async fn swarch_by_email(&self, user_id: Uuid, query:String) -> Result<Vec<User>, sqlx::Error>;
+    async fn search_by_email(&self, user_id: Uuid, query:String) -> Result<Vec<User>, sqlx::Error>;
 
     async fn save_encrypted_file(&self, user_id: Uuid,
     file_name: String,
@@ -210,7 +210,7 @@ impl UserExt for DbCLient {
 
     Ok(())
   }
-  async fn swarch_by_email(
+  async fn search_by_email(
     &self,
     user_id: Uuid,
     query: String,
@@ -231,5 +231,45 @@ impl UserExt for DbCLient {
     .await?;
 
     Ok(user)
+ }
+ async fn save_encrypted_file(
+    &self,
+    user_id: Uuid,
+    file_name:String,
+    file_size: i64,
+    recipient_user_id:  Uuid,
+    passord: String,
+    expiration_date: DateTime<Utc>,
+    encrypted_aes_key: Vec<u8>,
+    encrypted_file: Vec<u8>,
+    iv: Vec<u8>
+ ) -> Result<(), sqlx::Error> {
+     let file_id: Uuid = sqlx::query_scalar!(
+        r#"
+        INSERT INTO files (user_id, file_name, file_size, encrypted_aes_key, encrypted_file, iv, created_at)
+        VALUES ($1, $2, $3, $4, $5, $6, NOW())
+        RETURNING id
+        "#,
+        user_id,
+        file_name,
+        file_size,
+        encrypted_aes_key,
+        encrypted_file,
+        iv
+     ).fetch_one(&self.pool).await?;
+
+     sqlx::query!(
+        r#"
+        INSERT INTO files ( file_id,recipient_user_id,password,expiration_date, created_at)
+        VALUES ($1, $2, $3, $4, NOW())
+        "#,
+        file_id,
+        recipient_user_id,
+        passord,
+        expiration_date
+     )
+     .execute(&self.pool)
+     .await?;
+    Ok(())
  }
 }
