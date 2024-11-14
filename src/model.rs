@@ -34,7 +34,7 @@ pub struct ShareLink {
    pub file_id: Option<uuid::Uuid>,
    pub recipient_user_id: Option<uuid::Uuid>,
    pub password: String,
-   pub expieation_date: Option<DateTime<Utc>>,
+   pub expiration_date: Option<DateTime<Utc>>,
    pub created_at: Option<DateTime<Utc>>
 }
 
@@ -43,7 +43,7 @@ pub struct SendFileDetails {
     pub file_id: uuid::Uuid,
     pub file_name: String,
     pub recipient_email: String,
-    pub expiration_data: Option<DateTime<Utc>>,
+    pub expiration_date: Option<DateTime<Utc>>,
     pub created_at: Option<DateTime<Utc>>
 
 }
@@ -52,7 +52,7 @@ pub struct ReciveFileDetails {
     pub file_id: uuid::Uuid,
     pub file_name: String,
     pub sender_email: String,
-    pub expiration_data: Option<DateTime<Utc>>,
+    pub expiration_date: Option<DateTime<Utc>>,
     pub created_at: Option<DateTime<Utc>>
 
 }
