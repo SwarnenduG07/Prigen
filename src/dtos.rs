@@ -1,6 +1,5 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
-use time::util;
 use validator::{Validate, ValidationError};
 
 use crate::model::{ReciveFileDetails, SendFileDetails, User};

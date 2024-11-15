@@ -1,8 +1,13 @@
+use std::intrinsics::mir::Move;
+
+use axum::http::{header::{ACCEPT, ACCEPT_ENCODING, AUTHORIZATION, CONTENT_TYPE}, HeaderValue, Method};
 use config::Config;
 use db::DbCLient;
 use dotenv::dotenv;
 use sqlx::{postgres::PgPoolOptions};
+use tower_http::cors::CorsLayer;
 use tracing_subscriber::filter::LevelFilter;
+use tokio_cron_scheduler::{JobScheduler, Job};
 
 mod config;
 mod model;
@@ -40,5 +45,25 @@ async fn main() {
             std::process::exit(1)
         }
     };
+   let cors = CorsLayer::new()
+   .allow_origin("http://localhost:3000".parse::<HeaderValue>().unwrap())
+   .allow_headers([AUTHORIZATION, ACCEPT, CONTENT_TYPE])
+   .allow_credentials(true)
+   .allow_methods([Method::GET, Method::POST, Method:: PUT]);
 
+   let db_client = DbCLient::new(pool);
+   let app_state = AppState {
+    env: config.clone(),
+    db_client: db_client.clone(),
+   };
+   let sched  = JobScheduler::new().await.unwrap();
+
+   let job = Job::new_async("0 0 * * * *", {
+      move |_, _| {
+        let db_client = db_client.clone();
+        Box::pin(async move {
+            println!("Running scheduled taskto delete expired files...")
+        })
+      }
+   });
 }
