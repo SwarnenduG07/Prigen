@@ -1,9 +1,11 @@
 
-use axum::http::{header::{ACCEPT, ACCEPT_ENCODING, AUTHORIZATION, CONTENT_TYPE}, HeaderValue, Method};
+// use std::sync::Arc;
+
+use axum::{http::{header::{ACCEPT, AUTHORIZATION, CONTENT_TYPE}, HeaderValue, Method}, Router};
 use config::Config;
 use db::{DbCLient, UserExt};
 use dotenv::dotenv;
-use sqlx::{postgres::PgPoolOptions};
+use sqlx::postgres::PgPoolOptions;
 use tower_http::cors::CorsLayer;
 use tracing_subscriber::filter::LevelFilter;
 use tokio_cron_scheduler::{JobScheduler, Job};
@@ -13,6 +15,7 @@ mod model;
 mod dtos;
 mod error;
 mod db;
+mod utils;
 
 #[derive(Debug, Clone)]
 
@@ -76,7 +79,7 @@ async fn main() {
       sched.start().await.unwrap();
    });
 
-   let app = create_router(Arc::new(app_state.clone())).layer(cors.clone());
+   let app = Router::new().layer(cors.clone());
    println!(
     "{}" , 
     format!("Server is running on http://localhost:{}", config.port)
