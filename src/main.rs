@@ -1,8 +1,7 @@
-use std::intrinsics::mir::Move;
 
 use axum::http::{header::{ACCEPT, ACCEPT_ENCODING, AUTHORIZATION, CONTENT_TYPE}, HeaderValue, Method};
 use config::Config;
-use db::DbCLient;
+use db::{DbCLient, UserExt};
 use dotenv::dotenv;
 use sqlx::{postgres::PgPoolOptions};
 use tower_http::cors::CorsLayer;
@@ -62,8 +61,27 @@ async fn main() {
       move |_, _| {
         let db_client = db_client.clone();
         Box::pin(async move {
-            println!("Running scheduled taskto delete expired files...")
+            println!("Running scheduled taskto delete expired files...");
+            if let Err(err) = db_client.delete_expired_files().await {
+                eprintln!("Error deleting expired file: {:?}", err);
+            } else {
+                 println!("Successfulley deleted ecpired files")
+            }
         })
       }
+   }).unwrap();
+   sched.add(job).await.unwrap();
+
+   tokio::spawn(async move {
+      sched.start().await.unwrap();
    });
+
+   let app = create_router(Arc::new(app_state.clone())).layer(cors.clone());
+   println!(
+    "{}" , 
+    format!("Server is running on http://localhost:{}", config.port)
+   );
+   let listener = tokio::net::TcpListener::bind(format!("0.0.0.0:{}", &config.port))
+   .await.unwrap();
+axum::serve(listener, app).await.unwrap();
 }
