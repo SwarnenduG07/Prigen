@@ -16,6 +16,7 @@ mod dtos;
 mod error;
 mod db;
 mod utils;
+mod handler;
 
 #[derive(Debug, Clone)]
 
