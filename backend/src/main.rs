@@ -17,6 +17,7 @@ mod error;
 mod db;
 mod utils;
 mod handler;
+mod middleware;
 
 #[derive(Debug, Clone)]
 
