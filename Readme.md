@@ -26,3 +26,5 @@ pnpm dev
 # or
 bun dev
 ```
+
+## Then change the Envs with your own Envs. 
