@@ -1,4 +1,9 @@
-# Prigen -> Secure File shering app
+# Prigen -> Secure File shering
+
+## Features. 
+1 end to end encryption
+2 Light speed file sharing 
+3 Less Clicks
 
 ## Getting Started
 
