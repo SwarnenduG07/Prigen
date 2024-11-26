@@ -1,9 +1,9 @@
-import Image from "next/image";
+import Navbar from "@/components/navbar";
 
 export default function Home() {
   return (
-     <div className="bg-red-500">
-           Prigen
+     <div >
+           <Navbar />
      </div>
   );
 }
