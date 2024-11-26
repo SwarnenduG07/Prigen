@@ -1,9 +1,11 @@
+import LandingHero from "@/components/hero";
 import  { LandingNavBar } from "@/components/navbar";
 
 export default function Home() {
   return (
-     <div >
-           <LandingNavBar />
-     </div>
+     <main>
+           <LandingNavBar/>
+           <LandingHero />
+     </main>
   );
 }
