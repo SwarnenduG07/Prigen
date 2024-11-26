@@ -33,7 +33,9 @@ export function LandingNavBar(): JSX.Element {
         <div className="hidden md:flex items-center space-x-4">
           {!isLoggedIn ? (
             <>
-              <span className="hover:text-purple-500 cursor-pointer text-gray-300">Feature</span>
+              <a href="#features" className="block px-4 py-2 text-white">
+                 Features
+              </a>   
               <Button
                 className="w-20 h-8 rounded-xl hover:bg-zinc-800 hover:text-white"
                 onClick={() => router.push("/signin")}

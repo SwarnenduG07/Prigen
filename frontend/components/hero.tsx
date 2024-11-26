@@ -8,7 +8,7 @@ function LandingHero():JSX.Element {
   return (
     <div className='flex justify-center pt-28'>
         <div className=' '>
-           <h1 className='text-7xl font-thin bg-gradient-to-br from-fuchsia-300 to-purple-600 bg-clip-text text-transparent'>
+           <h1 className='lg:text-7xl md:text-7xl text-4xl font-thin bg-gradient-to-br from-fuchsia-300 to-purple-600 bg-clip-text text-transparent'>
               Shere Your Files With <span className='font-bold'>Prigen</span>
            </h1>
            <h1 className='text-gray-500 text-2xl pt-7 max-w-xl'>
@@ -20,7 +20,7 @@ function LandingHero():JSX.Element {
               onClick={() => {
                  router.push("/signup")
               }}
-              className='bg-neutral-300 text-black rounded-xl text-sm hover:bg-neutral-500'>
+              className='bg-neutral-300 text-black rounded-xl text-sm hover:bg-neutral-500 ml-2'>
                 Share Your Files
               </Button>
            </div>
