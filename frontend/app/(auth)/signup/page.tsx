@@ -1,11 +1,54 @@
 import { Button } from '@/components/ui/button';
+import { BACKEND_URL } from '@/config';
+import axios from 'axios';
 import { BirdIcon } from 'lucide-react';
-import React from 'react';
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
 
 const Signup = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
+  
+  const router = useRouter();
+
+
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    try {
+      
+      const response = await axios.post(`${BACKEND_URL}/register`, {
+        name,
+        email,
+        password,
+        password_confirm: confirmPassword, 
+      });
+
+      const { token } = response.data;
+      localStorage.setItem('token', token);  
+      router.push('/dashboard');  
+
+    } catch (error: any) {
+      console.error('Signup error:', error);
+      if (error.response && error.response.data) {
+        setError(error.response.data.message || 'Error during registration');
+      } else {
+        setError('Unexpected error occurred');
+      }
+    }
+  };
+
   return (
     <main className="flex items-center justify-center">
-      <div className="w-full max-w-md  rounded-lg p-8 sm:p-10 lg:p-16">
+      <div className="w-full max-w-md rounded-lg p-8 sm:p-10 lg:p-16">
         <div className="text-center text-red-400">
           <h1 className="text-4xl sm:text-5xl font-semibold flex justify-center items-center">
             <BirdIcon size={45} className="pr-2 text-fuchsia-600" />
@@ -24,13 +67,22 @@ const Signup = () => {
             </Button>
           </div>
 
-          <form className="space-y-4 pt-6 font-mono mt-8" action="#">
+
+          {error && (
+            <div className="text-red-600 text-center mt-4">
+              <p>{error}</p>
+            </div>
+          )}
+
+          <form className="space-y-4 pt-6 font-mono mt-8" onSubmit={handleSignup}>
             <div>
               <label className="block mb-2 text-sm text-gray-300 dark:text-white font-semibold">Your Name</label>
               <input
                 type="text"
                 name="name"
                 id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 className="bg-gray-600 border border-gray-300 text-gray-100 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                 placeholder="Your Name"
               />
@@ -41,6 +93,8 @@ const Signup = () => {
                 type="email"
                 name="email"
                 id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="bg-gray-600 border border-gray-300 text-gray-100 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                 placeholder="name@company.com"
               />
@@ -51,6 +105,8 @@ const Signup = () => {
                 type="password"
                 name="password"
                 id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 className="bg-gray-600 border border-gray-300 text-gray-100 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
               />
@@ -61,6 +117,8 @@ const Signup = () => {
                 type="password"
                 name="confirm-password"
                 id="confirm-password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="••••••••"
                 className="bg-gray-600 border border-gray-300 text-gray-100 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
               />
@@ -84,7 +142,7 @@ const Signup = () => {
               </div>
             </div>
 
-            <Button className="w-full bg-purple-600 hover:bg-fuchsia-900 rounded-lg mt-4">
+            <Button type="submit" className="w-full bg-purple-600 hover:bg-fuchsia-900 rounded-lg mt-4">
               Create Account
             </Button>
             <p className="text-sm font-light text-gray-500 dark:text-gray-400 mt-4 text-center">
