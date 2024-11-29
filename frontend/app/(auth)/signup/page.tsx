@@ -1,3 +1,4 @@
+"use client"
 import { Button } from '@/components/ui/button';
 import { BACKEND_URL } from '@/config';
 import axios from 'axios';

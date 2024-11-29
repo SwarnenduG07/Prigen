@@ -6,9 +6,6 @@ import { BirdIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
-
-
-
 async function handleSignin(email: string, password: string) {
   const router = useRouter()
   try {
@@ -24,7 +21,6 @@ async function handleSignin(email: string, password: string) {
   } catch (error) {
     console.error('Login error:', error);
     alert('Invalid email or password'); 
-    
   }
 }
 
@@ -34,8 +30,8 @@ const Signin = () => {
   const [loading, setLoading] = useState(false); // To manage loading state (optional)
 
   return (
-    <main className="flex items-center justify-center min-h-screen bg-gray-800/70">
-      <div className="w-full max-w-md rounded-lg p-8 sm:p-10 lg:p-16 bg-gray-800/90">
+    <main className="flex items-center justify-center">
+      <div className="w-full max-w-md rounded-lg p-8 sm:p-10 lg:p-16">
         <div className="text-center text-red-400">
           <h1 className="text-4xl sm:text-5xl font-semibold flex justify-center items-center">
             <BirdIcon size={45} className="pr-2 text-fuchsia-600" />

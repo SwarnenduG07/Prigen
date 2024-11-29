@@ -85,7 +85,7 @@ export const authOptions = {
   },
 
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user }: {token: any, user: any}) {
       if (user) {
         token.accessToken = user.token;
         token.user = { name: user.name, email: user.email };
@@ -93,7 +93,7 @@ export const authOptions = {
       return token;
     },
 
-    async session({ session, token }) {
+    async session({ token, session }: {token: any, session: any}) {
       if (token) {
         session.user = {
           ...session.user,
