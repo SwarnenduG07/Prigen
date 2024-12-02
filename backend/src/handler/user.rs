@@ -11,5 +11,13 @@ pub async fn get_me(
     Extension(user): Extension<JWTAuthMiddeware>,
 ) -> Result<impl IntoResponse, HttpError> {
     let filtered_user =FilterUserDto::filter_user(&user.user);
-    let user = &user.user;
-}
+    let response_data = UserResponseDto {
+        status: "success".to_string(),
+        data: UserData {user: filter_user},
+    };
+    ok(Json(response_data))
+}           
+
+pub async fn update_user_name(
+    
+)
