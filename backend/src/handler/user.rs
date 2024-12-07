@@ -8,6 +8,17 @@ use validator::Validate;
 use crate::{db::UserExt, dtos::{EmailListResponseDto, FilterEmailDto, FilterUserDto, NameUpdateDto, Response, SearchQueryByEmailDTO, UserData, UserPassowrdUpdateDto, userResponseDto}, error::{ErrorMessage, HttpError}, middleware::JWTAuthMiddeware, utils::password, AppState};
 
 
+pub fn user_handler() -> Router {
+        Router::new()
+        .route(
+            "/me",
+            get(get_me)
+        )
+        .route.("/name", put(update_user_name))
+        .route("/password", put(update_user_password))
+        .route("/search-email", put(search_by_email))
+}
+
 pub async fn get_me(
     Extension(_app_state): Extension<Arc<AppState>>,
     Extension(user): Extension<JWTAuthMiddeware>,
