@@ -3,7 +3,7 @@ use std::sync::Arc;
 use axum::{extract::Query, response::IntoResponse, routing::get, Extension, Json, Router};
 use validator::Validate;
 
-use crate::{db::UserExt, dtos::{RequestQueryDto, UserReceiveFileDto, UserReceiveFileListResponseDto, UserSendFileDto, UserSendFileListResponseDto}, error::HttpError, middleware::JWTAuthMiddeware, AppState};
+use crate::{db::UserExt, dtos::{RequestQueryDto, UserReceiveFileDto, UserReceiverFileListResponseDto, UserSendFileDto, UserSendListResponseDto}, error::HttpError, middleware::JWTAuthMiddeware, AppState};
 
 
 pub fn get_file_list_handler() ->Router {
@@ -22,10 +22,10 @@ pub async fn get_user_shared_files(
 
     let user = &user.user;
 
-    let page = query_params.page.unwrap_or(1);
+    let page = query_params.Page.unwrap_or(1);
     let limit = query_params.limit.unwrap_or(10);
 
-    let user_id  uuid::Uuid::parse_str(&user.id.to_string()).unwrap();
+    let user_id = uuid::Uuid::parse_str(&user.id.to_string()).unwrap();
 
     let (shared_files, total_count) = app_state.db_client
         .get_sent_files(user_id.clone(), page as u32, limit)
@@ -34,7 +34,7 @@ pub async fn get_user_shared_files(
 
       let filter_send_files = UserSendFileDto::filter_send_user_files(&shared_files);
 
-      let response = UserSendListResponseDto  {
+      let response = UserSendListResponseDto {
         status: "success".to_string(),
         files: filter_send_files,
         results: total_count,
@@ -44,19 +44,19 @@ pub async fn get_user_shared_files(
 
 pub async fn get_receive_shared_files(
   Query(query_params): Query<RequestQueryDto>,
-  Extension: Extension<Arc<AppState>>,
+  Extension(app_state): Extension<Arc<AppState>>,
   Extension(user): Extension<JWTAuthMiddeware>
 ) ->Result<impl IntoResponse, HttpError> {
     query_params.validate()
           .map_err(|e| HttpError::bad_request(e.to_string()))?;
 
-        leu user = &user.user;
+        let user = &user.user;
 
-        let page = query_params.page.unwrap_or(1);
+        let page = query_params.Page.unwrap_or(1);
         let limit = query_params.limit.unwrap_or(10);
 
 
-        let user_id = uuid::Uuid::parse_str(&user_id.to_string()).unwrap();
+        let user_id = uuid::Uuid::parse_str(&user.id.to_string()).unwrap();
 
         let (receive_fles, total_count) = app_state.db_client
                         .get_receive_files(user_id.clone(), page as u32, limit)
@@ -66,7 +66,7 @@ pub async fn get_receive_shared_files(
                       let filter_receive_filter = UserReceiveFileDto::filter_receive_user_files(&receive_fles);
 
 
-                      let response = UserReceiveFileListResponseDto {
+                      let response = UserReceiverFileListResponseDto {
                         status: "success".to_string(),
                         files: filter_receive_filter,
                         results: total_count,

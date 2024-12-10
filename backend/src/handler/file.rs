@@ -1,3 +1,9 @@
+use std::sync::Arc;
+
+use axum::{extract::{multipart, Multipart}, response::IntoResponse, Extension};
+
+use crate::{dtos::FileUploadDtos, error::HttpError, middleware::JWTAuthMiddeware, AppState};
+
  
 pub fn upload_file(
   Extension(app_state): Extension<Arc<AppState>>,
@@ -8,13 +14,13 @@ pub fn upload_file(
    let mut file_name = String::new();
    
    let mut file_size: i64 = 0;
-   let mut = form_data = FileUploadDtos {
+   let mut  form_data = FileUploadDtos {
        recipient_email: String::new(),
        password: String::new(),
        expiration_date: String::new(),
    };
 
-   while let Some(field) = multipart.next_field().await.unwrap() {
+   while let Some(field) = multipart::next_field().await.unwrap() {
     let name = field.name().unwrap().to_string();
 
     match name.as_str() {

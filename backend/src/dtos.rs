@@ -81,7 +81,7 @@ pub struct LoginUserDto {
  } 
  #[derive(Debug, Serialize, Deserialize)]
 
- pub struct userResponseDto {
+ pub struct UserResponseDto {
      pub status: String,
      pub data: UserData
  }
@@ -101,7 +101,7 @@ impl UserSendFileDto {
             file_id: file_data.file_id.to_string(),
             file_name: file_data.file_name.to_owned(),
             recipient_email: file_data.recipient_email.to_owned(),
-            expiration_date: file_data.expiration_data.unwrap(),
+            expiration_date: file_data.expiration_date.unwrap(),
             created_at: file_data.created_at.unwrap()
         }
     }
@@ -110,8 +110,15 @@ impl UserSendFileDto {
     }
 }  
 
-#[derive(Debug, Serialize, Deserialize)]
 
+#[derive(Debug, Serialize, Deserialize)]
+pub struct UserSendListResponseDto {
+    pub status: String,
+    pub files: Vec<UserSendFileDto>,
+    pub results: i64,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
 pub struct UserReceiveFileDto {
     pub file_id: String,
     pub file_name: String,
@@ -125,11 +132,11 @@ impl UserReceiveFileDto {
             file_id: file_data.file_id.to_string(),
             file_name: file_data.file_name.to_owned(),
             sender_email: file_data.sender_email.to_owned(),
-            expiration_date: file_data.expiration_data.unwrap(),
+            expiration_date: file_data.expiration_date.unwrap(),
             created_at: file_data.created_at.unwrap(),
         }
     }
-    fn filter_receive_user_files(user : &[ReciveFileDetails]) -> Vec<UserReceiveFileDto> {
+   pub fn filter_receive_user_files(user : &[ReciveFileDetails]) -> Vec<UserReceiveFileDto> {
         user.iter().map(UserReceiveFileDto::filter_receive_user_file).collect()
     }
 }

@@ -4,7 +4,7 @@ use axum::{extract::Request, http::header, middleware::Next, response::IntoRespo
 use serde::{Deserialize, Serialize};
 use axum_extra::extract::cookie::CookieJar;
 
-use crate::{db::UserExt, error::{ErrorMessage, HttpError}, models::User, utils::token, AppState};
+use crate::{db::UserExt, error::{ErrorMessage, HttpError}, model::User, utils::token, AppState};
 
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
