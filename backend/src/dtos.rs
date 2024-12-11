@@ -153,7 +153,7 @@ pub struct UserReceiverFileListResponseDto {
 
  pub struct UserLoginResponseDto {
      pub status: String,
-     pub data: UserSendFileDto
+     pub token: String,
  }
 
 #[derive(Serialize, Deserialize)]
@@ -216,7 +216,7 @@ pub struct EmailListResponseDto {
     pub emails: Vec<FilterEmailDto>,
 }
 
-#[derive(Validate, Debug, Default, Clone, Serialize, Deserialize)]
+#[derive(Validate, Debug, Default, Clone, Serialize, Deserialize)] 
 pub struct FileUploadDtos {
     #[validate(email(message = "Invalid email format"))]
     pub recipient_email: String,
