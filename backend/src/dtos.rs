@@ -148,9 +148,15 @@ pub struct UserReceiverFileListResponseDto {
     pub files: Vec<UserReceiveFileDto>,
     pub results: i64,
 }
+ 
+ #[derive(Debug, Serialize, Deserialize)]
+
+ pub struct UserLoginResponseDto {
+     pub status: String,
+     pub data: UserSendFileDto
+ }
 
 #[derive(Serialize, Deserialize)]
-
 pub struct Response {
     pub status: &'static str,
     pub message: String,
