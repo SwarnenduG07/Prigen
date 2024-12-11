@@ -46,7 +46,7 @@ pub struct LoginUserDto {
     #[validate(
         range(min =1)
     )]
-    pub Page: Option<usize>,
+    pub page: Option<usize>,
     #[validate(range(min = 1, max = 50))]
     pub limit: Option<usize>,
  }

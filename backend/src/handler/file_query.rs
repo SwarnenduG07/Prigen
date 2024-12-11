@@ -22,7 +22,7 @@ pub async fn get_user_shared_files(
 
     let user = &user.user;
 
-    let page = query_params.Page.unwrap_or(1);
+    let page = query_params.page.unwrap_or(1);
     let limit = query_params.limit.unwrap_or(10);
 
     let user_id = uuid::Uuid::parse_str(&user.id.to_string()).unwrap();
@@ -52,7 +52,7 @@ pub async fn get_receive_shared_files(
 
         let user = &user.user;
 
-        let page = query_params.Page.unwrap_or(1);
+        let page = query_params.page.unwrap_or(1);
         let limit = query_params.limit.unwrap_or(10);
 
 

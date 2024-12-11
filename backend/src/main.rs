@@ -1,6 +1,4 @@
 
-use std::sync::Arc;
-
 use axum::{http::{header::{ACCEPT, AUTHORIZATION, CONTENT_TYPE}, HeaderValue, Method}, Router};
 use config::Config;
 use db::{DbCLient, UserExt};
@@ -18,6 +16,7 @@ mod db;
 mod utils;
 mod handler;
 mod middleware;
+mod router;
 
 #[derive(Debug, Clone)]
 

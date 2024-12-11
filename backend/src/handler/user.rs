@@ -1,11 +1,9 @@
 use std::sync::Arc;
 
-use argon2::Params;
 use axum::{extract::Query, response::IntoResponse, routing::{get, put}, Extension, Json, Router};
-use rsa::rand_core::impls;
 use validator::Validate;
 
-use crate::{db::UserExt, dtos::{EmailListResponseDto, FilterEmailDto, FilterUserDto, NameUpdateDto, Response, SearchQueryByEmailDTO, UserData, UserPassowrdUpdateDto, userResponseDto}, error::{ErrorMessage, HttpError}, middleware::JWTAuthMiddeware, utils::password, AppState};
+use crate::{db::UserExt, dtos::{EmailListResponseDto, FilterEmailDto, FilterUserDto, NameUpdateDto, Response, SearchQueryByEmailDTO, UserData, UserPassowrdUpdateDto, UserResponseDto}, error::{ErrorMessage, HttpError}, middleware::JWTAuthMiddeware, utils::password, AppState};
 
 
 pub fn user_handler() -> Router {
@@ -24,7 +22,7 @@ pub async fn get_me(
     Extension(user): Extension<JWTAuthMiddeware>,
 ) -> Result<impl IntoResponse, HttpError> {
     let filtered_user =FilterUserDto::filter_user(&user.user);
-    let response_data = userResponseDto {
+    let response_data = UserResponseDto {
         status: "success".to_string(),
         data: UserData {user: filtered_user},
     };
@@ -50,7 +48,7 @@ pub async fn update_user_name(
 
                     let filter_user = FilterUserDto::filter_user(&result);
 
-                    let response = userResponseDto {
+                    let response = UserResponseDto {
                         status: "success".to_string(),
                         data: UserData {user: filter_user},
                     };
