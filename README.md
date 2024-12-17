@@ -1,6 +1,5 @@
 # Rust Backend File Share with End-to-End Encryption
 
-[![Watch the video](https://img.youtube.com/vi/t5w2dauFmhM/maxresdefault.jpg)](https://youtu.be/t5w2dauFmhM)
 
 This project implements a file sharing backend using Rust, featuring end-to-end encryption to ensure the privacy and security of shared files.
 
@@ -106,13 +105,3 @@ To get a local copy of this project up and running, follow these steps:
 - **GET /api/file/retrieve**: Retrieve an uploaded file by ID (requires authentication).
 - **POST /api/list/send**: Send a list of files to another user.
 - **GET /api/list/receive**: Retrieve the list of files received from another user.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for more details.
-
-## Donations
-
-If you find this project useful and would like to support its continued development, you can make a donation via [Buy Me a Coffee](https://buymeacoffee.com/aarambhdevhub).
-
-Thank you for your support!
