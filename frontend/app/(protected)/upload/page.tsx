@@ -94,14 +94,14 @@ export default function UploadPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-lg font-bold text-purple-600 mb-2">
               Expiration Date
             </label>
             <input
               type="datetime-local"
               value={expirationDate}
               onChange={(e) => setExpirationDate(e.target.value)}
-              className="w-full bg-gray-700 border border-gray-600 rounded p-2"
+              className="w-full rounded-sm border-2 hover:border-fuchsia-500 p-2 border-gray-900"
               required
             />
           </div>
