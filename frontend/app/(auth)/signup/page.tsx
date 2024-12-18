@@ -1,10 +1,10 @@
 "use client"
 import { Button } from '@/components/ui/button';
-import { BACKEND_URL } from '@/config';
+import { NEXT_PUBLIC_BACKEND_URL } from '@/config';
 import axios from 'axios';
 import { BirdIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const Signup = () => {
   const [name, setName] = useState('');
@@ -12,38 +12,42 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   
   const router = useRouter();
 
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
+    setError('');
 
     if (password !== confirmPassword) {
       setError('Passwords do not match');
+      setIsLoading(false);
       return;
     }
 
     try {
       
-      const response = await axios.post(`${BACKEND_URL}/register`, {
+      const response = await axios.post(`${NEXT_PUBLIC_BACKEND_URL}/api/auth/register`, {
         name,
         email,
         password,
-        password_confirm: confirmPassword, 
+        passwordConfirm: confirmPassword, 
       });
 
-      const { token } = response.data;
-      localStorage.setItem('token', token);  
-      router.push('/dashboard');  
+      // Store token and redirect
+      // if (response.data?.token) {
+      //   localStorage.setItem('token', response.data.token); // Direct storage
+        router.push('/upload');
+
 
     } catch (error: any) {
       console.error('Signup error:', error);
-      if (error.response && error.response.data) {
-        setError(error.response.data.message || 'Error during registration');
-      } else {
-        setError('Unexpected error occurred');
-      }
+      setError(error.response?.data?.message || 'Registration failed');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -143,8 +147,12 @@ const Signup = () => {
               </div>
             </div>
 
-            <Button type="submit" className="w-full bg-purple-600 hover:bg-fuchsia-900 rounded-lg mt-4">
-              Create Account
+            <Button 
+              type="submit" 
+              className="w-full bg-purple-600 hover:bg-fuchsia-900 rounded-lg mt-4"
+              disabled={isLoading}
+            >
+              {isLoading ? 'Creating Account...' : 'Create Account'}
             </Button>
             <p className="text-sm font-light text-gray-500 dark:text-gray-400 mt-4 text-center">
               Already have an account?{' '}
