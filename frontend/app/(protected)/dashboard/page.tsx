@@ -7,7 +7,7 @@ import React from "react";
 export default function Dashboard() {
   return (
     <div className="bg-gray-200 dark:bg-gray-900 h-screen text-gray-800 dark:text-gray-200">
-      <div className="w-[590px] h-[400px] bg-gradient-to-br from-[#d82fc4] to-[#abc614] rounded-[100%] absolute z-1 top-[60%] left-[50%] translate-x-[-50%] translate-y-[-50%] blue-[90px] flex items-center text-center justify-center blur-[90px]"></div>
+      <div className="w-[590px] h-[400px] bg-gradient-to-br from-[#d82fc4] to-[#abc614] rounded-[100%] absolute z-1 top-[60%] left-[50%] translate-x-[-50%] translate-y-[-50%] blur-[90px] flex items-center text-center justify-center "></div>
       <div>
         <Topbar />
       </div>
