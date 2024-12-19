@@ -6,7 +6,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from '@radix-ui/react-dropdown-menu';
-import { Star, GithubIcon, User, Dot, LogOut } from 'lucide-react';
+import { Star, GithubIcon, User, Dot, LogOut, BirdIcon } from 'lucide-react';
 import React from 'react';
 import ThemeToggle from './dark';
 
@@ -17,9 +17,9 @@ const Topbar = () => {
       <header className="flex justify-between items-start p-6">
         <div className="flex items-center bg-white/95 dark:bg-gray-800 px-6 py-1.5 rounded-xl w-44 cursor-pointer shadow-md">
           <div className="flex items-center gap-1">
-            <Star
-              className="border-neutral-300 fill-yellow-500/90 text-yellow-500"
-              size={13}
+            <BirdIcon
+              className="border-neutral-300  text-emerald-500"
+              size={15}
             />
             <span className="font-semibold text-sm dark:text-white">Prigen</span>
           </div>

@@ -1,15 +1,24 @@
 import { useTheme } from "next-themes";
 import { Switch } from "./ui/switch";
+import { useEffect, useState } from "react";
 
 const ThemeToggle = () => {
   const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const toggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
+
+  if (!mounted) return null; 
 
   return (
-    <Switch
-      onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-      className="bg-emerald-400 dark:bg-gray-700"
-    >
-      {theme === "light" ? "Switch to dark Mode" : "Switch to Light Mode"}
+    <Switch onClick={toggleTheme} className="dark:bg-emerald-400">
+      {theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
     </Switch>
   );
 };

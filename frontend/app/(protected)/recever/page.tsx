@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { NEXT_PUBLIC_BACKEND_URL } from '@/config';
 import axios from 'axios';
+import Topbar from '@/components/topbar';
 
 export default function DownloadPage() {
   const [sharedId, setSharedId] = useState('');
@@ -56,51 +57,55 @@ export default function DownloadPage() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="w-full max-w-md">
+    <main className="">
+        <div className='w-[590px] h-[400px]  bg-[#d82fc4] dark:bg-emerald-700 rounded-[100%] absolute z-1 top-[60%] left-[55%] dark:left-[50%] translate-x-[-50%] translate-y-[-50%] blur-[90px] flex items-center text-center justify-center '></div>
+        <div className='w-[300px] h-[300px]  bg-[#f22828] dark:bg-yellow-500  rounded-[100%] absolute z-1 top-[60%] left-[45%] dark:left-[50%] translate-x-[-50%] translate-y-[-50%] blur-[90px] flex items-center text-center justify-center '></div>
+        <Topbar />
+      <div className="flex flex-col items-center justify-center mt-24">
         <h1 className="text-2xl font-bold mb-8 text-center text-white">Download File</h1>
-        
-        <form onSubmit={handleDownload} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
-              Shared ID
-            </label>
-            <input
-              type="text"
-              value={sharedId}
-              onChange={(e) => setSharedId(e.target.value)}
-              className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-white"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
-              Password
-            </label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-white"
-              required
-            />
-          </div>
-
-          <Button
-            type="submit"
-            className="w-full bg-purple-600 hover:bg-purple-700"
-            disabled={isLoading}
-          >
-            {isLoading ? 'Downloading...' : 'Download File'}
-          </Button>
-
-          {error && (
-            <div className="text-red-500 text-center mt-4">
-              {error}
+        <div className='bg-white/10 dark:bg-gray-600/10 shadow-lg backdrop-blur-md px-16 py-16 relative before:absolute before:inset-0 before:bg-gradient-to-br before:from-purple-500/10 before:via-pink-500/10 before:to-blue-500/10 before:-z-10 before:rounded-lg rounded-xl'>
+          <form onSubmit={handleDownload} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Shared ID
+              </label>
+              <input
+                type="text"
+                value={sharedId}
+                onChange={(e) => setSharedId(e.target.value)}
+                className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-white"
+                required
+              />
             </div>
-          )}
-        </form>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Password
+              </label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-white"
+                required
+              />
+            </div>
+
+            <Button
+              type="submit"
+              className="w-full bg-purple-600 hover:bg-purple-700"
+              disabled={isLoading}
+            >
+              {isLoading ? 'Downloading...' : 'Download File'}
+            </Button>
+
+            {error && (
+              <div className="text-red-500 text-center mt-4">
+                {error}
+              </div>
+            )}
+          </form>
+        </div>
       </div>
     </main>
   );
