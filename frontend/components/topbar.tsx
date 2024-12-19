@@ -13,19 +13,19 @@ const Topbar = () => {
             <Star className="border-neutral-300 fill-yellow-500/90 text-yellow-500" size={13} />
             <span className="font-semibold text-sm">Prigen</span>
           </div>
-          <div className="ml-auto flex text-center font-bold text-lg text-purple-600">
+          <div className="ml-auto flex  items-center font-bold text-lg text-purple-600">
             ...
           </div>
         </div>
         
         <div className="flex gap-8 ">
           <a href="#" className="text-gray-500 font-medium"></a>
-          <div className="bg-white flex justify-between  gap-5 rounded-lg px-5 py-1.5 text-gray-700 shadow hover:shadow-md">
-            <a href="https://github.com/swarnenduG07/Prigen"> < GithubIcon className="fill-fuchsia-200" size={28}/> </a>
-            <DropdownMenu>
+          <div className="bg-white border-r border-gray-400 flex items-center justify-between  gap-5 rounded-lg px-5 py-2 text-gray-700 shadow hover:shadow-md">
+            <a href="https://github.com/swarnenduG07/Prigen" className=' border-r border-emerald-300'> < GithubIcon className="fill-fuchsia-200 mr-3" size={20}/> </a>
+            <DropdownMenu >
                 <DropdownMenuTrigger>
                 <Avatar className="h-7 w-7 bg-neutral-700 hover:bg-zinc-800 cursor-pointer">
-                <User className="h-8 w-8 text-red-500" />
+                <User className="h-5 w-5 text-red-500" />
                 </Avatar>
                 <DropdownMenuContent>
                     <DropdownMenuItem>

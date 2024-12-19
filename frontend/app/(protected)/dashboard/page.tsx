@@ -1,9 +1,7 @@
 "use client"; // For Next.js client components
 import Topbar from "@/components/topbar";
-import { Button } from "@/components/ui/button";
 import InteractiveHoverButton from "@/components/ui/interactive-hover-button";
-import { DownloadIcon, ReceiptEuro, SendIcon } from "lucide-react";
-import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 export default function Dashboard() {
@@ -19,19 +17,18 @@ export default function Dashboard() {
             <h1 className="text-4xl md:text-5xl font-bold text-purple-600">
               Share & Receve your File with end to end  ecryption
             </h1>
-            <p className="text-gray-500 mt-4 text-lg">
-              Explore your requirements
+            <p className="text-gray-600 mt-7 text-xl">
+              Share your file with speed and security
             </p>
 
-            <section className="mt-32 w-full max-w-xl rounded-lg bg-white/20 shadow-lg backdrop-blur-md py-16
+            <section className="mt-32 w-full max-w-xl bg-white/20 shadow-lg backdrop-blur-md py-16
           relative before:absolute before:inset-0 before:bg-gradient-to-br before:from-purple-500/10 
-          before:via-pink-500/10 before:to-blue-500/10 before:-z-10 before:rounded-lg">
+          before:via-pink-500/10 before:to-blue-500/10 before:-z-10 before:rounded-lg rounded-xl">
               <div className="flex space-x-8  items-center justify-center" >
-                  <InteractiveHoverButton  className=" bg-jnd"><InteractiveHoverButton/>
-                     <SendIcon />
-                     Send File
-                  </InteractiveHoverButton >
-                  <InteractiveHoverButton className=" bg-transparent" text="Receve File"/>
+                <Link href={"upload"}>
+                  <InteractiveHoverButton  className="bg-transparent hover:bg-purple-400" text="Send File"/></Link>
+                 <Link href={"recever"}>
+                   <InteractiveHoverButton   className="bg-transparent hover:bg-purple-400"  text="Receve File"/></Link>
                   
                 </div>
             </section>
