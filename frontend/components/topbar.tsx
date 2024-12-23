@@ -9,6 +9,8 @@ import {
 import { Star, GithubIcon, User, Dot, LogOut, BirdIcon } from 'lucide-react';
 import React from 'react';
 import ThemeToggle from './dark';
+import { getMe } from '@/lib/action/profileHandler.action';
+import Link from 'next/link';
 
 const Topbar = () => {
   return (
@@ -44,10 +46,11 @@ const Topbar = () => {
                 </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-md shadow-md">
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={getMe}>
                   <a href="#" className="flex items-center gap-2">
                     <Dot className="h-4 w-4" />
-                    <span>Profile</span>
+                    <Link href="/profile"><span>Profile</span></Link>
+                    
                   </a>
                 </DropdownMenuItem>
                 <DropdownMenuItem>

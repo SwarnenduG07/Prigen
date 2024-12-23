@@ -40,7 +40,7 @@ const Signup = () => {
       // Store token and redirect
       // if (response.data?.token) {
       //   localStorage.setItem('token', response.data.token); // Direct storage
-        router.push('/upload');
+        router.push('/dashboard');
 
 
     } catch (error: any) {

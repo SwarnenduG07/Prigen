@@ -12,6 +12,7 @@ const Signin = () => {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  
 
   const handleLogin = async (email: string, password: string) => {
     setIsLoading(true);
@@ -25,7 +26,7 @@ const Signin = () => {
 
       if (response.data?.token) {
         localStorage.setItem('token', response.data.token);
-        router.push('/upload');
+        router.push('/dashboard');
       } else {
         setError('Invalid response from server');
       }
