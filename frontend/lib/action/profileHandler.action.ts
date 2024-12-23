@@ -14,7 +14,3 @@ export const getMe = async () => {
         throw e;
     }
 }
-getMe().then((data) => {
-    console.log(data);
-    
-})

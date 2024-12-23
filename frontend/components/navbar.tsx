@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 import { Bird, Menu } from "lucide-react";
@@ -7,20 +7,8 @@ import { signIn } from "next-auth/react";
 
 export function LandingNavBar(): JSX.Element {
   const router = useRouter();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  useEffect(() => {
-    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-    setIsLoggedIn(Boolean(token));
-  }, []);
-
-  const handleSignout = (): void => {
-    localStorage.removeItem("token");
-    sessionStorage.removeItem("token");
-    setIsLoggedIn(false);
-    router.push("/signin");
-  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 border border-neutral-800 rounded-2xl flex items-center justify-between lg:mx-48 md:mx-24 mx-4 mt-4 px-4 py-2 backdrop-blur-sm bg-neutral-800/80">
@@ -31,8 +19,7 @@ export function LandingNavBar(): JSX.Element {
 
       <div className="flex items-center space-x-4">
         <div className="hidden md:flex items-center space-x-4">
-          {!isLoggedIn ? (
-            <>
+          
               <a href="#features" className="block px-4 py-2 text-white">
                  Features
               </a>   
@@ -48,16 +35,8 @@ export function LandingNavBar(): JSX.Element {
               >
                 Signup
               </Button>
-            </>
-          ) : (
-            <Button
-              className="rounded-full bg-orange-400 hover:bg-red-800 hover:text-white"
-              onClick={handleSignout}
-              variant="ghost"
-            >
-              Logout
-            </Button>
-          )}
+
+
         </div>
 
         <button
