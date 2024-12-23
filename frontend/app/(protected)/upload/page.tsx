@@ -23,11 +23,12 @@ export default function UploadPage() {
       if (file) formData.append('fileUpload', file);
       formData.append('recipient_email', recipientEmail);
       formData.append('password', password);
-      formData.append('expiration_date', expirationDate);
+      const fromateExpiredDate = new Date (expirationDate).toISOString();
+      formData.append('expiration_date', fromateExpiredDate);
 
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        `${NEXT_PUBLIC_BACKEND_URL}/api/files/upload`,
+        `${NEXT_PUBLIC_BACKEND_URL}/api/file/upload`,
         formData,
         {
           headers: {
