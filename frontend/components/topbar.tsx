@@ -16,11 +16,10 @@ const Topbar = () => {
   const router = useRouter();
 
   const logoutUser = () => {
-    // // Clear authentication tokens
-    // localStorage.removeItem("token");
-    // sessionStorage.clear();
+    // Clear authentication tokens
+    localStorage.removeItem("token");
+    sessionStorage.clear();
 
-    // Redirect to sign-in page
     router.push("/signin");
   };
 

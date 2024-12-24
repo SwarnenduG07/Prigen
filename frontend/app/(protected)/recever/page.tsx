@@ -16,6 +16,7 @@ interface ReceivedFile {
   sender_email: string;
   created_at: string;
   shared_id: string;
+  password: string;
 }
 
 export default function ReceivePage() {
@@ -56,7 +57,7 @@ export default function ReceivePage() {
         `${NEXT_PUBLIC_BACKEND_URL}/api/file/retrieve`,
         {
           shared_id: sharedId,
-          password: ''
+          password: '',
         },
         {
           headers: {
@@ -98,6 +99,8 @@ export default function ReceivePage() {
 
   return (
     <main className="container mx-auto p-4">
+      <div className='w-[590px] h-[400px]  bg-[#d82fc4] dark:bg-emerald-700 rounded-[100%] absolute z-1 top-[60%] left-[55%] dark:left-[50%] translate-x-[-50%] translate-y-[-50%] blur-[90px] flex items-center text-center justify-center '></div>
+      <div className='w-[300px] h-[300px]  bg-[#f22828] dark:bg-yellow-500  rounded-[100%] absolute z-1 top-[60%] left-[45%] dark:left-[50%] translate-x-[-50%] translate-y-[-50%] blur-[90px] flex items-center text-center justify-center '></div>
       <Topbar />
       <Card className="mt-8">
         <CardHeader>
@@ -107,7 +110,7 @@ export default function ReceivePage() {
         <CardContent>
           {receivedFiles.length === 0 ? (
             <div className="text-center py-8">
-              <p className="text-gray-500">No files have been shared with you yet.</p>
+              <p className="text-gray-500">No files have been shared with you yet</p>
             </div>
           ) : (
             <Table>
@@ -120,7 +123,7 @@ export default function ReceivePage() {
                   <TableHead>Action</TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody>
+              <TableBody key={receivedFiles.length}>
                 {receivedFiles.map((file) => (
                   <TableRow key={file.id}>
                     <TableCell>{file.file_name}</TableCell>
