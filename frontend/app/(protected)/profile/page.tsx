@@ -6,26 +6,18 @@ import axios from 'axios';
 import { NEXT_PUBLIC_BACKEND_URL } from '@/config';
 import Topbar from '@/components/topbar';
 
-interface UpdateUser {
-  user_id: string;
-  filename: string;
-  created_at: string;
-  recipient_email: string;
-  status: string;
-}
 
 export default function ProfilePage() {
-  const [name, setName] = useState<any>(null);
-  const [userDelails, setuserDetails] = useState<UpdateUser[]>([]);
-  const [password, setPassword] = useState<UpdateUser[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [userDetails, setUserDetails] = useState<any>(null);
+  const [email, setEmail] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [oldPassword, setOldPassword] = useState<string>("");
+  const [newPassword, setNewPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
-  const [email, setemail] = useState<string | null>(null);
+
 
   useEffect(() => {
-    updateUserDetails();
-    updatePassword();
-    searchEmail();
     getuserDelatils();
   }, []);
 
@@ -40,14 +32,17 @@ export default function ProfilePage() {
           }
         }
        )
-       setuserDetails(res.data);
+       
+       setUserDetails(res.data);
+       setEmail(res.data.email);
+       setName(res.data.name);
     } catch (e) {
         console.log("Failed to fetch user details",e);
         
     }
   }
 
-  const updateUserDetails = async () => {
+  const handleUpdatename = async () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.put(
@@ -56,38 +51,41 @@ export default function ProfilePage() {
           headers: { 'Authorization': `Bearer ${token}` }
         }
       );
-      setName(response.data);
+      alert("Name updated successfully");
+      getuserDelatils();
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to load profile');
+      setError(err.response?.data?.message || 'Failed to update profile');
     }
   };
 
   const updatePassword = async () => {
+
+    if(newPassword !== confirmPassword) {
+      setError("New passwrd and confirmation do not match");
+      return;
+    }
     try {
       const token = localStorage.getItem('token');
       const response = await axios.put(
         `${NEXT_PUBLIC_BACKEND_URL}/api/user/password`,
         {
+          old_password: oldPassword,
+          new_password: newPassword
+        },
+        {
           headers: { 'Authorization': `Bearer ${token}` }
         }
       );
-      setPassword(response.data);
+      alert("Password updated successfully");
+        setOldPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+      
      
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to load files');
-    } finally {
-      setLoading(false);
-    }
+      setError(err.response?.data?.message || 'Failed to update password');
+    } 
   };
-  const searchEmail = async () => {
-    const token =localStorage.getItem('token');
-    const res = await axios.get(`${NEXT_PUBLIC_BACKEND_URL}/api/user/search-emails`,{
-      headers: {
-         'Authorization': `Bearer ${token}` 
-    }
-    });
-    setemail(res.data);
-  }
 
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -95,18 +93,20 @@ export default function ProfilePage() {
       <div className="w-[590px] h-[400px] bg-gradient-to-br from-[#d82fc4] to-[#abc614] rounded-[100%] absolute z-1 top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] blur-[90px] flex items-center text-center justify-center "></div>
       <Topbar />
       <div className='bg-red-400/20 backdrop-blur-md max-w-xl lg:ml-[400px] md:ml-[200px] ml-[50px] rounded-3xl pb-32'>
+       {error && <p className='text-2xl font-semibold text-purple-400'>{error}</p>}
        <div className='mt-10 ml-7 px-5 py-2 '>
            <h1 className='font-bold text-lg'>
               Update user name
            </h1>
-           <div>
+           <div className='space-y-3'>
               <label className=' mb-4 text-sm text-gray-600 dark:text-white font-semibold'>Email</label>
               <input
                 type="email"
                 name="email"
                 id="email"
-                // value={name}
-                className="pt-2 bg-gray-600/5 border border-purple-400 text-gray-100 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-[500px] p-2.5"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="pt-2 bg-gray-600/5 border border-purple-400 text-gray-500 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-[500px] p-2.5"
                 placeholder="jhondow@gmail.com"
               />
               <label className=' mb-4 text-sm text-gray-600 dark:text-white font-semibold'>Name</label>
@@ -114,9 +114,18 @@ export default function ProfilePage() {
                 type="name"
                 name="name"
                 id="name"
-                className="pt-2 bg-gray-600/5 border border-purple-400 text-gray-100 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-[500px] p-2.5"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="pt-2 bg-gray-600/5 border border-purple-400 text-gray-600 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-[500px] p-2.5"
                 placeholder="name"
               />
+               <Button 
+                 className='w-full font-semibold bg-gradient-to-br from-purple-500 to-rose-600 text-black hover:bg-gradient-to-br hover:from-sky-500 hover:to-amber-600 hover:text-neutral-100'
+                 onClick={updatePassword}
+                 variant="secondary"
+              >
+                  Update Password
+              </Button>
            </div>
        </div>
        <div className='mt-10 ml-7 px-3'>
@@ -129,7 +138,8 @@ export default function ProfilePage() {
                 type="Password"
                 name=" Password"
                 id="Password"
-                // value={name}
+                value={oldPassword}
+                onChange={(e) => setOldPassword(e.target.value)}
                 className="pt-2 bg-gray-600/5 border border-purple-400 text-gray-100 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-[500px] p-2.5  placeholder-gray-600"
                 placeholder="old password"
               />
@@ -137,6 +147,8 @@ export default function ProfilePage() {
               <input
                 type="password"
                 name="passowrd"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
                 id="password"
                 className="pt-2 bg-gray-600/5 border border-purple-400 text-gray-100 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 placeholder-gray-600 block w-[500px] p-2.5"
                 placeholder="new password"
@@ -146,9 +158,16 @@ export default function ProfilePage() {
                 type="password"
                 name="passowrd"
                 id="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 className="pt-2 bg-gray-600/5 border border-purple-400 text-gray-100 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-[500px] p-2.5 placeholder-gray-600"
                 placeholder="confirm password"
               />
+              <Button 
+              className='w-full font-semibold bg-gradient-to-br from-purple-500 to-rose-600 text-black hover:bg-gradient-to-br hover:from-sky-500 hover:to-amber-600 hover:text-neutral-100'
+              onClick={updatePassword}>
+                  Update Password
+              </Button>
            </div>
         </div>
        </div>
