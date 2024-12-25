@@ -22,14 +22,14 @@ export default function ProfilePage() {
 
   useEffect(() => {
     fetchProfile();
-    fetchFileHistory();
+    updatePassword();
   }, []);
 
   const fetchProfile = async () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get(
-        `${NEXT_PUBLIC_BACKEND_URL}/api/user/me/name`,
+        `${NEXT_PUBLIC_BACKEND_URL}/api/user/me/`,
         {
           headers: { 'Authorization': `Bearer ${token}` }
         }
@@ -40,11 +40,11 @@ export default function ProfilePage() {
     }
   };
 
-  const fetchFileHistory = async () => {
+  const updatePassword = async () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get(
-        `${NEXT_PUBLIC_BACKEND_URL}/api/files/history`,
+        `${NEXT_PUBLIC_BACKEND_URL}/api/user/password`,
         {
           headers: { 'Authorization': `Bearer ${token}` }
         }
@@ -59,12 +59,35 @@ export default function ProfilePage() {
 
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <Topbar />
       
       {/* Background Effects */}
-      <div className='w-[590px] h-[400px] bg-purple-400 dark:bg-emerald-700 rounded-full absolute z-1 top-[30%] left-[55%] blur-[90px] opacity-20'></div>
-      <div className='w-[300px] h-[300px] bg-pink-400 dark:bg-yellow-500 rounded-full absolute z-1 top-[40%] left-[35%] blur-[90px] opacity-20'></div>
-
+      <div className='w-[590px] h-[400px]  bg-[#2cec59] dark:bg-emerald-700 rounded-[100%] absolute z-1 top-[60%] left-[55%] dark:left-[50%] translate-x-[-50%] translate-y-[-50%] blur-[90px] flex items-center text-center justify-center '></div>
+      <div className='w-[300px] h-[400px]  bg-[#e026e6] dark:bg-yellow-500  rounded-[100%] absolute z-1 top-[60%] left-[55%] dark:left-[50%] translate-x-[-50%] translate-y-[-50%] blur-[90px] flex items-center text-center justify-center '></div>
+      <Topbar />
+       <div className='mt-10 ml-7'>
+           <h1 className='font-bold text-lg'>
+              Update user name
+           </h1>
+           <div>
+              <label className=' mb-4 text-sm text-gray-600 dark:text-white font-semibold'>Email</label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                // value={name}
+                className="pt-2 bg-gray-600/5 border border-purple-400 text-gray-100 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-[500px] p-2.5"
+                placeholder="jhondow@gmail.com"
+              />
+              <label className=' mb-4 text-sm text-gray-600 dark:text-white font-semibold'>Name</label>
+              <input
+                type="name"
+                name="name"
+                id="name"
+                className="pt-2 bg-gray-600/5 border border-purple-400 text-gray-100 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-[500px] p-2.5"
+                placeholder="name"
+              />
+           </div>
+       </div>
       </main>
   );
 }
