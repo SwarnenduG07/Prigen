@@ -6,8 +6,8 @@ import axios from 'axios';
 import { NEXT_PUBLIC_BACKEND_URL } from '@/config';
 import Topbar from '@/components/topbar';
 
-interface FileHistory {
-  id: string;
+interface UpdateUser {
+  user_id: string;
   filename: string;
   created_at: string;
   recipient_email: string;
@@ -15,26 +15,48 @@ interface FileHistory {
 }
 
 export default function ProfilePage() {
-  const [profile, setProfile] = useState<any>(null);
-  const [files, setFiles] = useState<FileHistory[]>([]);
+  const [name, setName] = useState<any>(null);
+  const [userDelails, setuserDetails] = useState<UpdateUser[]>([]);
+  const [password, setPassword] = useState<UpdateUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [email, setemail] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchProfile();
+    updateUserDetails();
     updatePassword();
+    searchEmail();
+    getuserDelatils();
   }, []);
 
-  const fetchProfile = async () => {
+
+  const getuserDelatils = async () => {
+    try {
+       const token = localStorage.getItem('token')
+       const res = await axios.get(`${NEXT_PUBLIC_BACKEND_URL}/api/user/me`,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
+       )
+       setuserDetails(res.data);
+    } catch (e) {
+        console.log("Failed to fetch user details",e);
+        
+    }
+  }
+
+  const updateUserDetails = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(
-        `${NEXT_PUBLIC_BACKEND_URL}/api/user/me/`,
+      const response = await axios.put(
+        `${NEXT_PUBLIC_BACKEND_URL}/api/user/name`,
         {
           headers: { 'Authorization': `Bearer ${token}` }
         }
       );
-      setProfile(response.data);
+      setName(response.data);
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to load profile');
     }
@@ -43,19 +65,29 @@ export default function ProfilePage() {
   const updatePassword = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(
+      const response = await axios.put(
         `${NEXT_PUBLIC_BACKEND_URL}/api/user/password`,
         {
           headers: { 'Authorization': `Bearer ${token}` }
         }
       );
-      setFiles(response.data);
+      setPassword(response.data);
+     
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to load files');
     } finally {
       setLoading(false);
     }
   };
+  const searchEmail = async () => {
+    const token =localStorage.getItem('token');
+    const res = await axios.get(`${NEXT_PUBLIC_BACKEND_URL}/api/user/search-emails`,{
+      headers: {
+         'Authorization': `Bearer ${token}` 
+    }
+    });
+    setemail(res.data);
+  }
 
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-gray-900">
