@@ -57,7 +57,7 @@ export default function ReceivePage() {
 
     try {
       const token = localStorage.getItem('token');
-         await axios.post(
+      const response = await axios.post(
         `${NEXT_PUBLIC_BACKEND_URL}/api/file/retrieve`,
         {
           shared_id: sharedId,
@@ -73,18 +73,18 @@ export default function ReceivePage() {
       );
 
       // Create download link
-      // const blob = new Blob([response.data]);
-      // // const url = window.URL.createObjectURL(blob)
-      // const link = document.createElement('a');
-      // // link.href = url;
+      const blob = new Blob([response.data]);
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a');
+      link.href = url;
       
-      // // Get filename from Content-Disposition header
-      // const filename = response.headers['content-disposition']?.split('filename=')[1] || 'downloaded-file';
-      // link.download = filename;
-      // document.body.appendChild(link);
-      // link.click();
-      // link.remove();
-      // window.URL.revokeObjectURL(url);
+      // Get filename from Content-Disposition header
+      const filename = response.headers['content-disposition']?.split('filename=')[1] || 'downloaded-file';
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
 
     } catch (err) {
       if(axios.isAxiosError(err)) {
