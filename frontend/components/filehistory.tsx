@@ -29,17 +29,16 @@ export default function FileHistory() {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get(`${NEXT_PUBLIC_BACKEND_URL}/api/list/receive`, {
+      const res = await axios.get(`${NEXT_PUBLIC_BACKEND_URL}/api/list/send`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       setReceivedFiles(res.data.files);
     } catch (err) {
-     
-      if(axios.isAxiosError(err)) {
-        setError(err.response?.data?.message || "Failed to fetch files")
-      } else { 
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data?.message || "Failed to fetch files");
+      } else {
         console.error(err);
         setError("Failed to fetch files");
       }
@@ -56,45 +55,50 @@ export default function FileHistory() {
   };
 
   return (
-    <main className="flex flex-col justify-center items-center text-center mt-12">
-      <div className="mt-14 text-2xl font-thin text-gray-800">Check Your File History</div>
-      <section className="mt-10 mb-10 w-full max-w-7xl bg-neutral-50 dark:bg-gray-600/10 shadow-lg backdrop-blur-md py-16 relative before:absolute before:inset-0 before:bg-gradient-to-br before:bg-purple-500/10 rounded-xl before:to-blue-500/10 before:-z-10 before:rounded-lg">
-        <div className="translate-y-[-30%]">
-          {loading ? (
-            <div className="text-center py-8">
-              <p className="text-gray-500">Loading...</p>
-            </div>
-          ) : error ? (
-            <div className="text-center py-8">
-              <p className="text-red-500">{error}</p>
-            </div>
-          ) : receivedFiles.length === 0 ? (
-            <div className="text-center py-8">
-              <p className="text-gray-500">No files have been shared with you yet</p>
-            </div>
-          ) : (
-            <Table>
-              <TableHeader>
-                <TableRow className="font-bold text-black">
-                  <TableHead className="text-black">File Name</TableHead>
-                  <TableHead>Size</TableHead>
-                  <TableHead>Sender</TableHead>
-                  <TableHead>Date Received</TableHead>
-                  <TableHead>Action</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {receivedFiles.map((file) => (
-                  <TableRow key={file.id}>
-                    <TableCell>{file.file_name}</TableCell>
-                    <TableCell>{filesize(file.file_size)}</TableCell>
-                    <TableCell>{file.sender_email}</TableCell>
-                    <TableCell>{format(new Date(file.created_at), "MMM dd, yyyy")}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          )}
+    <main className="flex flex-col justify-center items-center text-center mt-8">
+      <div className="text-3xl font-semibold text-gray-800 dark:text-gray-200 mb-8">
+        File History
+      </div>
+      <section className="w-full max-w-6xl px-4">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+          <div className="p-6">
+            {loading ? (
+              <div className="flex justify-center py-8">
+                <p className="text-gray-500 dark:text-gray-400">Loading...</p>
+              </div>
+            ) : error ? (
+              <div className="flex justify-center py-8">
+                <p className="text-red-500">{error}</p>
+              </div>
+            ) : receivedFiles.length === 0 ? (
+              <div className="flex justify-center py-8">
+                <p className="text-gray-500 dark:text-gray-400">No files have been shared by you yet</p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="font-semibold text-gray-700 dark:text-gray-300 text-left">File Name</TableHead>
+                      <TableHead className="font-semibold text-gray-700 dark:text-gray-300 text-center">Size</TableHead>
+                      <TableHead className="font-semibold text-gray-700 dark:text-gray-300 text-left">Recipient</TableHead>
+                      <TableHead className="font-semibold text-gray-700 dark:text-gray-300 text-center">Date Shared</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {receivedFiles.map((file) => (
+                      <TableRow key={file.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                        <TableCell className="text-left">{file.file_name}</TableCell>
+                        <TableCell className="text-center">{filesize(file.file_size)}</TableCell>
+                        <TableCell className="text-left">{file.sender_email}</TableCell>
+                        <TableCell className="text-center">{format(new Date(file.created_at), "MMM dd, yyyy")}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
+          </div>
         </div>
       </section>
     </main>

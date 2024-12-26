@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import axios from 'axios';
 import { NEXT_PUBLIC_BACKEND_URL } from '@/config';
 import Topbar from '@/components/topbar';
+import toast from 'react-hot-toast';
 
 export default function UploadPage() {
   const [file, setFile] = useState<File | null>(null);
@@ -40,10 +41,12 @@ export default function UploadPage() {
 
       if (response.data.status === 'success') {
         // Handle success
+        toast.success('File uploaded successfully');
         console.log('File uploaded successfully');
       }
     } catch (err) {
       if(axios.isAxiosError(err)) {
+        toast.error('Upload failed,try again');
         setError(err.response?.data?.message || 'Upload failed');
       } else {
         setError('Upload failed');
