@@ -5,17 +5,24 @@ import { Button } from '@/components/ui/button';
 import axios from 'axios';
 import { NEXT_PUBLIC_BACKEND_URL } from '@/config';
 import Topbar from '@/components/topbar';
+import toast from 'react-hot-toast';
 
+  interface UserDetails {
+    email: string;
+    name: string;
+    shared_id?: string;
+  }
 
 
 export default function ProfilePage() {
-  const [userDetails, setUserDetails] = useState<any>(null);
+  const [userDetails, setUserDetails] = useState<UserDetails | null >(null);
   const [email, setEmail] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [oldPassword, setOldPassword] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
 
   useEffect(() => {
@@ -24,6 +31,7 @@ export default function ProfilePage() {
 
 
   const getuserDelatils = async () => {
+      setIsLoading(true);
     try {
        const token = localStorage.getItem('token')
        const res = await axios.get(`${NEXT_PUBLIC_BACKEND_URL}/api/users/me`,
@@ -42,16 +50,19 @@ export default function ProfilePage() {
         setError("Failed to fetch user details");
       }
 
+    } finally {
+      setIsLoading(false);
     }
   }
 
   const handleUpdatename = async () => {
+    setIsLoading(true);
     try {
       const token = localStorage.getItem('token');
       await axios.put(
         `${NEXT_PUBLIC_BACKEND_URL}/api/users/name`,
         { 
-          name: name
+           name
         },
         { 
           headers: { 
@@ -60,8 +71,8 @@ export default function ProfilePage() {
           }
         }
       );
-      alert("Name updated successfully");
-      getuserDelatils();
+      toast.success("Name updated successfully");
+       setUserDetails((prev) => (prev ? { ...prev, name } : prev));
     } catch (err) {
       if(axios.isAxiosError(err)) {
         console.error('Update error:', err.response?.data); // Add this for debugging
@@ -69,12 +80,15 @@ export default function ProfilePage() {
       } else {
         setError('Failed to update profile');
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const updatePassword = async () => {
 
     if(newPassword !== confirmPassword) {
+      toast.error("New passwrd and confirmation do not match");
       setError("New passwrd and confirmation do not match");
       return;
     }
@@ -91,7 +105,7 @@ export default function ProfilePage() {
           headers: { 'Authorization': `Bearer ${token}` }
         }
       );
-      alert("Password updated successfully");
+      toast.success("Password updated successfully");
         setOldPassword("");
         setNewPassword("");
         setConfirmPassword("");
@@ -99,6 +113,7 @@ export default function ProfilePage() {
      
     } catch (err) {
       if(axios.isAxiosError(err)) {
+        toast.error("Failed to update password");
       setError(err.response?.data?.message || 'Failed to update password');
       } else {
         setError('Failed to update password');
@@ -110,12 +125,13 @@ export default function ProfilePage() {
     <main className="min-h-screen bg-gray-50 dark:bg-gray-900">
       
       <div className="w-[590px] h-[400px] bg-gradient-to-br from-[#d82fc4] to-[#abc614] rounded-[100%] absolute z-1 top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] blur-[90px] flex items-center text-center justify-center "></div>
+      <div className="w-[590px] h-[400px] bg-gradient-to-br from-[#d82fc4] to-[#abc614] rounded-[100%] absolute z-1 top-[80%] left-[50%] translate-x-[-50%] translate-y-[-50%] blur-[90px] flex items-center text-center justify-center "></div>
       <Topbar />
       <div className='bg-red-400/20 backdrop-blur-md max-w-xl lg:ml-[400px] md:ml-[200px] ml-[50px] rounded-3xl pb-32'>
        {error && <p className='text-center text-xl pt-4 font-semibold text-purple-600'>{error}</p>}
        <div className='mt-10 ml-7 px-5 py-2 '>
            <h1 className='font-bold text-lg'>
-              Update user name
+              Update user Name {userDetails?.name}
            </h1>
            <div className='space-y-3'
            >
@@ -140,11 +156,13 @@ export default function ProfilePage() {
                 placeholder="name"
               />
                <Button 
+               type='submit'
                  className='w-full font-semibold bg-gradient-to-br from-purple-500 to-rose-600 text-black hover:bg-gradient-to-br hover:from-sky-500 hover:to-amber-600 hover:text-neutral-100'
                  onClick={handleUpdatename}
                  variant="secondary"
+                 disabled={isLoading}
               >
-                  Update details
+                  {isLoading ?  "Updating..." : "Update Name"}
               </Button>
            </div>
        </div>
@@ -183,10 +201,14 @@ export default function ProfilePage() {
                 className="pt-2 bg-gray-600/5 border border-purple-400 text-gray-100 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-[500px] p-2.5 placeholder-gray-600"
                 placeholder="confirm password"
               />
-              <Button 
-              className='w-full font-semibold bg-gradient-to-br from-purple-500 to-rose-600 text-black hover:bg-gradient-to-br hover:from-sky-500 hover:to-amber-600 hover:text-neutral-100'
-              onClick={updatePassword}>
-                  Update Password
+               <Button 
+               type='submit'
+                 className='w-full font-semibold bg-gradient-to-br from-purple-500 to-rose-600 text-black hover:bg-gradient-to-br hover:from-sky-500 hover:to-amber-600 hover:text-neutral-100'
+                 onClick={updatePassword}
+                 variant="secondary"
+                 disabled={isLoading}
+              >
+                  {isLoading ?  "Updating..." : "Update Name"}
               </Button>
            </div>
         </div>
