@@ -4,7 +4,7 @@ import { NEXT_PUBLIC_BACKEND_URL } from '@/config';
 import axios from 'axios';
 import { BirdIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 
 const Signup = () => {
   const [name, setName] = useState('');
@@ -30,22 +30,28 @@ const Signup = () => {
 
     try {
       
-      const response = await axios.post(`${NEXT_PUBLIC_BACKEND_URL}/api/auth/register`, {
+       await axios.post(`${NEXT_PUBLIC_BACKEND_URL}/api/auth/register`, {
         name,
         email,
         password,
         passwordConfirm: confirmPassword, 
       });
 
-      // Store token and redirect
-      // if (response.data?.token) {
-      //   localStorage.setItem('token', response.data.token); // Direct storage
-        router.push('/dashboard');
+      //  if (response.data?.token) {
+      //   localStorage.setItem('token', response.data.token);
+      //   console.error('error', response.data.token);
+      //    // Direct storage
+        router.push('/signin');
+      // }
 
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Signup error:', error);
-      setError(error.response?.data?.message || 'Registration failed');
+      if (axios.isAxiosError(error)) {
+        setError(error.response?.data?.message || 'Registration failed');
+      } else {
+        setError('Registration failed');
+      }
     } finally {
       setIsLoading(false);
     }

@@ -42,8 +42,12 @@ export default function UploadPage() {
         // Handle success
         console.log('File uploaded successfully');
       }
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Upload failed');
+    } catch (err) {
+      if(axios.isAxiosError(err)) {
+        setError(err.response?.data?.message || 'Upload failed');
+      } else {
+        setError('Upload failed');
+      }
     } finally {
       setIsLoading(false);
     }

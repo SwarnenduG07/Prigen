@@ -7,6 +7,7 @@ import { NEXT_PUBLIC_BACKEND_URL } from '@/config';
 import Topbar from '@/components/topbar';
 
 
+
 export default function ProfilePage() {
   const [userDetails, setUserDetails] = useState<any>(null);
   const [email, setEmail] = useState<string>("");
@@ -27,9 +28,7 @@ export default function ProfilePage() {
        const token = localStorage.getItem('token')
        const res = await axios.get(`${NEXT_PUBLIC_BACKEND_URL}/api/users/me`,
         {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
+          headers: { 'Authorization': `Bearer ${token}` }
         }
        )
        
@@ -37,24 +36,39 @@ export default function ProfilePage() {
        setEmail(res.data.data.user.email);
        setName(res.data.data.user.name);
     } catch (e) {
+      if(axios.isAxiosError(e)) { 
         console.log("Failed to fetch user details",e);
-        
+      } else {
+        setError("Failed to fetch user details");
+      }
+
     }
   }
 
   const handleUpdatename = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.put(
+      await axios.put(
         `${NEXT_PUBLIC_BACKEND_URL}/api/users/name`,
-        {
-          headers: { 'Authorization': `Bearer ${token}` }
+        { 
+          name: name
+        },
+        { 
+          headers: { 
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
         }
       );
       alert("Name updated successfully");
       getuserDelatils();
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to update profile');
+    } catch (err) {
+      if(axios.isAxiosError(err)) {
+        console.error('Update error:', err.response?.data); // Add this for debugging
+        setError(err.response?.data?.message || 'Failed to update profile');
+      } else {
+        setError('Failed to update profile');
+      }
     }
   };
 
@@ -66,7 +80,7 @@ export default function ProfilePage() {
     }
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.put(
+       await axios.put(
         `${NEXT_PUBLIC_BACKEND_URL}/api/users/password`,
         {
           old_password: oldPassword,
@@ -83,8 +97,12 @@ export default function ProfilePage() {
         setConfirmPassword("");
       
      
-    } catch (err: any) {
+    } catch (err) {
+      if(axios.isAxiosError(err)) {
       setError(err.response?.data?.message || 'Failed to update password');
+      } else {
+        setError('Failed to update password');
+      }
     } 
   };
 
@@ -94,7 +112,7 @@ export default function ProfilePage() {
       <div className="w-[590px] h-[400px] bg-gradient-to-br from-[#d82fc4] to-[#abc614] rounded-[100%] absolute z-1 top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] blur-[90px] flex items-center text-center justify-center "></div>
       <Topbar />
       <div className='bg-red-400/20 backdrop-blur-md max-w-xl lg:ml-[400px] md:ml-[200px] ml-[50px] rounded-3xl pb-32'>
-       {error && <p className='text-2xl font-semibold text-purple-400'>{error}</p>}
+       {error && <p className='text-center text-xl pt-4 font-semibold text-purple-600'>{error}</p>}
        <div className='mt-10 ml-7 px-5 py-2 '>
            <h1 className='font-bold text-lg'>
               Update user name
@@ -108,7 +126,7 @@ export default function ProfilePage() {
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="pt-2 bg-gray-600/5 border border-purple-400 text-gray-500 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-[500px] p-2.5"
+                className="pt-2 bg-gray-600/5 border border-purple-400 text-gray-700  rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-[500px] p-2.5"
                 placeholder="jhondow@gmail.com"
               />
               <label className=' mb-4 text-sm text-gray-600 dark:text-white font-semibold'>Name</label>
@@ -118,7 +136,7 @@ export default function ProfilePage() {
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="pt-2 bg-gray-600/5 border border-purple-400 text-gray-600 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-[500px] p-2.5"
+                className="pt-2 bg-gray-600/5 border border-purple-400 text-gray-700  rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-[500px] p-2.5"
                 placeholder="name"
               />
                <Button 

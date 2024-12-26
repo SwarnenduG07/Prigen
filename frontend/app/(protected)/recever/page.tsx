@@ -41,8 +41,12 @@ export default function ReceivePage() {
         }
       );
       setReceivedFiles(response.data.files);
-    } catch (err: any) {
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
       setError(err.response?.data?.message || 'Failed to fetch files');
+      } else {
+        setError("Failed to fetch files");
+      }
     }
   };
 
@@ -82,8 +86,12 @@ export default function ReceivePage() {
       link.remove();
       window.URL.revokeObjectURL(url);
 
-    } catch (err: any) {
+    } catch (err) {
+      if(axios.isAxiosError(err)) {
       setError(err.response?.data?.message || 'Download failed');
+      } else {
+        setError("Download failed");
+      }
     } finally {
       setIsLoading(false);
       setDownloadingId(null);
@@ -108,7 +116,15 @@ export default function ReceivePage() {
         </CardHeader>
         <Separator />
         <CardContent>
-          {receivedFiles.length === 0 ? (
+          {isLoading ? (
+            <div className='text-center text-gray-700'>
+                ...Loading
+            </div>
+          ) : error ? (
+            <div className='text-center text-red-500'>
+              {error}
+            </div>
+          ): receivedFiles.length === 0 ? (
             <div className="text-center py-8">
               <p className="text-gray-500">No files have been shared with you yet</p>
             </div>

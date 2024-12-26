@@ -7,7 +7,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@radix-ui/react-dropdown-menu";
-import { Star, GithubIcon, User, Dot, LogOut, BirdIcon } from "lucide-react";
+import {  GithubIcon, User, Dot, LogOut, BirdIcon } from "lucide-react";
 import React from "react";
 import { useRouter } from "next/navigation";
 import ThemeToggle from "./dark";
@@ -17,7 +17,7 @@ const Topbar = () => {
 
   const logoutUser = () => {
     // Clear authentication tokens
-    localStorage.removeItem("token");
+  localStorage.removeItem("token");
     sessionStorage.clear();
 
     router.push("/signin");

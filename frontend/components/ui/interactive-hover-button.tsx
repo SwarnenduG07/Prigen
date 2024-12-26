@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowRight, SendHorizonalIcon } from "lucide-react";
+import {  SendHorizonalIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface InteractiveHoverButtonProps

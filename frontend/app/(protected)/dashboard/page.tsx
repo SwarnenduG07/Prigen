@@ -1,8 +1,7 @@
 "use client"; 
-import FileHistory from "@/components/file-history";
+import FileHistory from "@/components/filehistory";
 import Topbar from "@/components/topbar";
 import InteractiveHoverButton from "@/components/ui/interactive-hover-button";
-import { Table, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Link from "next/link";
 import React from "react";
 

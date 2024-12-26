@@ -33,10 +33,14 @@ export default function FileHistory() {
         },
       });
       setReceivedFiles(res.data.files);
-    } catch (e: any) {
-      const errorMessage = e.response?.data?.message || "Failed to fetch files";
-      console.error(errorMessage);
-      setError(errorMessage);
+    } catch (err) {
+     
+      if(axios.isAxiosError(err)) {
+        setError(err.response?.data?.message || "Failed to fetch files")
+      } else { 
+        console.error(err);
+        setError("Failed to fetch files");
+      }
     } finally {
       setLoading(false);
     }
