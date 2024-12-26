@@ -25,7 +25,7 @@ export default function ProfilePage() {
   const getuserDelatils = async () => {
     try {
        const token = localStorage.getItem('token')
-       const res = await axios.get(`${NEXT_PUBLIC_BACKEND_URL}/api/user/me`,
+       const res = await axios.get(`${NEXT_PUBLIC_BACKEND_URL}/api/users/me`,
         {
           headers: {
             'Authorization': `Bearer ${token}`
@@ -33,9 +33,9 @@ export default function ProfilePage() {
         }
        )
        
-       setUserDetails(res.data);
-       setEmail(res.data.email);
-       setName(res.data.name);
+       setUserDetails(res.data.data.user);
+       setEmail(res.data.data.user.email);
+       setName(res.data.data.user.name);
     } catch (e) {
         console.log("Failed to fetch user details",e);
         
@@ -46,7 +46,7 @@ export default function ProfilePage() {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.put(
-        `${NEXT_PUBLIC_BACKEND_URL}/api/user/name`,
+        `${NEXT_PUBLIC_BACKEND_URL}/api/users/name`,
         {
           headers: { 'Authorization': `Bearer ${token}` }
         }
@@ -67,10 +67,11 @@ export default function ProfilePage() {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.put(
-        `${NEXT_PUBLIC_BACKEND_URL}/api/user/password`,
+        `${NEXT_PUBLIC_BACKEND_URL}/api/users/password`,
         {
           old_password: oldPassword,
-          new_password: newPassword
+          new_password: newPassword,
+          new_password_confirm: confirmPassword,
         },
         {
           headers: { 'Authorization': `Bearer ${token}` }
@@ -98,7 +99,8 @@ export default function ProfilePage() {
            <h1 className='font-bold text-lg'>
               Update user name
            </h1>
-           <div className='space-y-3'>
+           <div className='space-y-3'
+           >
               <label className=' mb-4 text-sm text-gray-600 dark:text-white font-semibold'>Email</label>
               <input
                 type="email"
@@ -121,10 +123,10 @@ export default function ProfilePage() {
               />
                <Button 
                  className='w-full font-semibold bg-gradient-to-br from-purple-500 to-rose-600 text-black hover:bg-gradient-to-br hover:from-sky-500 hover:to-amber-600 hover:text-neutral-100'
-                 onClick={updatePassword}
+                 onClick={handleUpdatename}
                  variant="secondary"
               >
-                  Update Password
+                  Update details
               </Button>
            </div>
        </div>
