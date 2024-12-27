@@ -1,0 +1,48 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n                SELECT\n                    f.id AS file_id,\n                    f.file_name,\n                    u.email AS recipient_email,\n                    sl.expiration_date,\n                    sl.created_at\n                FROM \n                    shared_links sl\n                JOIN \n                    files f ON sl.file_id = f.id\n                JOIN \n                    users u ON sl.recipient_user_id = u.id\n                WHERE \n                    f.user_id = $1\n                ORDER BY \n                    sl.created_at DESC \n                LIMIT $2 \n                OFFSET $3\n            ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "file_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "file_name",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "recipient_email",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "expiration_date",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 4,
+        "name": "created_at",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Int8",
+        "Int8"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "5aac2d3455d5496f0540e408a6b79664decaa6054a2065b32c258e0ad682c5e8"
+}

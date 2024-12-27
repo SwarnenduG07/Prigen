@@ -1,0 +1,64 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n            SELECT id, user_id, file_name, file_size, encrypted_aes_key, encrypted_file, iv, created_at\n            FROM files\n            WHERE id = $1\n            ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "user_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 2,
+        "name": "file_name",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "file_size",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 4,
+        "name": "encrypted_aes_key",
+        "type_info": "Bytea"
+      },
+      {
+        "ordinal": 5,
+        "name": "encrypted_file",
+        "type_info": "Bytea"
+      },
+      {
+        "ordinal": 6,
+        "name": "iv",
+        "type_info": "Bytea"
+      },
+      {
+        "ordinal": 7,
+        "name": "created_at",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "9d2b7672089c4b26c7d1fa7f25be2363f870c30ba6196fb19dded24bdb34564e"
+}

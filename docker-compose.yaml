@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  backend:
+    build: 
+      context: ./file-share-rust-backend
+      dockerfile: Dockerfile
+    image: secureshare-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/secureshare
+      - JWT_SECRET_KEY=your_jwt_secret_here
+      - JWT_MAXAGE=60
+      - PORT=8000
+    depends_on:
+      db:
+        condition: service_healthy
+    command: sh -c "sqlx migrate run && ./secureshare_backend"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: nextjs-app
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:8000
+    depends_on:
+      - backend
+
+  db:
+    image: postgres:15-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=secureshare
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./file-share-rust-backend/migrations:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
