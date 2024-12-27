@@ -25,13 +25,15 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+RUN npm install
+RUN npm run build
 
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN \
 if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-elif [ -f package-lock.json ]; then npm install --legacy-peer-deps ;\
+elif [ -f package-lock.json ]; then npm install --legacy-peer-deps;\
 elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
 elif [ -f bun.lockb ]; then bun install  ; \
 else echo "Lockfile not found." && exit 1; \
@@ -48,12 +50,10 @@ ENV NODE_ENV=production
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
+COPY --from=builder /app/next.config.js ./
 COPY --from=builder /app/public ./public
-
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
 
 USER nextjs
 
