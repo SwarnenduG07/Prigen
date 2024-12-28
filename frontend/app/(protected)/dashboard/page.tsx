@@ -4,49 +4,78 @@ import Topbar from "@/components/topbar";
 import InteractiveHoverButton from "@/components/ui/interactive-hover-button";
 import Link from "next/link";
 import React from "react";
+import { motion } from "framer-motion";
 
 export default function Dashboard() {
   return (
-    <div className="bg-gray-200 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
-      <div className="w-[590px] h-[400px] bg-gradient-to-br from-[#d82fc4] to-[#abc614] rounded-[100%] absolute z-1 top-[60%] left-[50%] translate-x-[-50%] translate-y-[-50%] blur-[90px] flex items-center text-center justify-center"></div>
+    <div className="min-h-screen relative">
+      <div className="fixed w-[600px] h-[600px] bg-gradient-to-br from-fuchsia-600/30 to-purple-600/30 rounded-full 
+        blur-[100px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10" />
+
       <div>
         <Topbar />
       </div>
-      <div>
-        <main className="flex flex-col justify-center items-center text-center mt-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-purple-600 dark:text-purple-400">
-            Share & Receive your File with End-to-End Encryption
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-7 text-xl">
-            Share your file with speed and security
-          </p>
 
-          <section
-            className="mt-32 w-full max-w-xl bg-white/20 dark:bg-gray-600/10 shadow-lg backdrop-blur-md py-16
-          relative before:absolute before:inset-0 before:bg-gradient-to-br before:from-purple-500/10 
-          before:via-pink-500/10 before:to-blue-500/10 before:-z-10 before:rounded-lg rounded-xl"
+      <main className="container mx-auto px-4 relative z-10">
+        <div className="flex flex-col items-center justify-center mt-16 space-y-6">
+          <motion.h1 
+            className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-fuchsia-300 to-purple-600 
+              bg-clip-text text-transparent text-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
           >
-            <div className="flex space-x-8 items-center justify-center">
-              <Link href={"upload"}>
+            Share & Receive Files Securely
+          </motion.h1>
+
+          <motion.p 
+            className="text-xl text-gray-400 max-w-2xl text-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+          >
+            End-to-end encrypted file sharing with blazing fast speeds
+          </motion.p>
+
+          <motion.section
+            className="w-full max-w-xl mt-16 p-8 rounded-2xl backdrop-blur-md
+              bg-white/5 border border-purple-500/20 shadow-xl
+              relative before:absolute before:inset-0 before:bg-gradient-to-br 
+              before:from-purple-500/10 before:via-fuchsia-500/10 before:to-blue-500/10 
+              before:-z-10 before:rounded-2xl"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.4, duration: 0.5 }}
+          >
+            <div className="flex flex-col md:flex-row gap-6 items-center justify-center">
+              <Link href="/upload">
                 <InteractiveHoverButton
-                  className="bg-transparent hover:bg-purple-400 dark:hover:bg-purple-400 border-purple-500 dark:border-emerald-300"
-                  text="Send File"
+                  className="px-5 md:w-auto bg-gradient-to-r from-purple-500 to-fuchsia-500 
+                    hover:opacity-90 transition-all duration-200"
+                  text="Send File" 
                 />
               </Link>
-              <Link href={"recever"}>
+              
+              <Link href="/recever">
                 <InteractiveHoverButton
-                  className="bg-transparent hover:bg-purple-400 dark:hover:bg-purple-500
-                  500 border-purple-500 dark:border-emerald-300"
+                  className="px-6 md:w-auto bg-gradient-to-r from-fuchsia-500 to-purple-500
+                    hover:opacity-90 transition-all duration-200"
                   text="Receive File"
                 />
               </Link>
             </div>
-          </section>
-        </main>
-        <div>
-            <FileHistory />
+          </motion.section>
         </div>
-      </div>  
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.5 }}
+          className="mt-16"
+        >
+          <FileHistory />
+        </motion.div>
+      </main>
     </div>
   );
 }

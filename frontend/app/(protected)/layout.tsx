@@ -1,6 +1,6 @@
 import { Background } from "@/components/ui/background"
 
-const AuthLayout = ({ children }: { children: React.ReactNode }) => {
+const protectedLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <main className="relative min-h-screen overflow-hidden bg-black">
       <Background />
@@ -11,4 +11,4 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default AuthLayout;
+export default protectedLayout;
