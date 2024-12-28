@@ -1,5 +1,7 @@
+"use client"
 import React from 'react'
 import { Lock, Zap, HardDrive, Share2 } from 'lucide-react'
+import { motion } from 'framer-motion'
 
 const Features = () => {
   const features = [
@@ -26,32 +28,54 @@ const Features = () => {
   ]
 
   return (
-    <section className="py-20 px-4 mt-20" id="features">
+    <motion.section 
+      className="py-16 px-4 " 
+      id="features"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+    >
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-purple-500 to-fuchsia-500 bg-clip-text text-transparent">
+        <motion.h2 
+          className="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-purple-500 to-fuchsia-500 bg-clip-text text-transparent"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
           Why Choose Prigen?
-        </h2>
+        </motion.h2>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((feature, index) => (
-            <div 
+            <motion.div 
               key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.2, delay: index * 0.1 }}
+              whileHover={{ scale: 1.05 }}
               className="p-6 rounded-xl bg-neutral-900/50 backdrop-blur-sm border border-neutral-800 hover:border-purple-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/10"
             >
-              <div className="p-3 w-fit rounded-lg bg-neutral-800/50 mb-4">
+              <motion.div 
+                className="p-3 w-fit rounded-lg bg-neutral-800/50 mb-4"
+                whileHover={{ rotate: 360 }}
+                transition={{ duration: 0.2 }}
+              >
                 {feature.icon}
-              </div>
-              <h3 className="text-xl font-semibold mb-2 text-neutral-200 hover:border-emerald-400 hover:shadow-xl hover:shadow-emerald-500/10">
+              </motion.div>
+              <h3 className="text-xl font-semibold mb-2 text-neutral-200">
                 {feature.title}
               </h3>
               <p className="text-neutral-400 leading-relaxed">
                 {feature.description}
               </p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
-    </section>
+    </motion.section>
   )
 }
 
