@@ -7,7 +7,7 @@ export default function AboutPage() {
   const stats = [
     {
       icon: <Users className="w-6 h-6 text-purple-500" />,
-      value: "50K+",
+      value: "COUNTING++",
       label: "Active Users"
     },
     {
@@ -22,7 +22,7 @@ export default function AboutPage() {
     },
     {
       icon: <CheckCircle2 className="w-6 h-6 text-pink-500" />,
-      value: "2M+",
+      value: "COUNTING++",
       label: "Files Shared"
     }
   ]
