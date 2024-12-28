@@ -1,5 +1,5 @@
 "use client";
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 import { Bird, Menu } from "lucide-react";
@@ -9,34 +9,33 @@ export function LandingNavBar(): JSX.Element {
   const router = useRouter();
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-
   return (
-    <nav className="fixed top-0 left-0 right-0 border border-neutral-800 rounded-2xl flex items-center justify-between lg:mx-48 md:mx-24 mx-4 mt-4 px-4 py-2 backdrop-blur-sm bg-neutral-800/80">
-      <div className="flex items-center text-neutral-100 space-x-2 cursor-pointer">
-        <Bird className="text-emerald-400" />
-        <span className="font-mono font-bold lg:text-lg md:text-lg text-sm">Prigen</span>
+    <nav className="fixed top-0 left-0 right-0 border border-neutral-800 rounded-2xl flex items-center justify-between lg:mx-48 md:mx-24 mx-4 mt-4 px-6 py-3 backdrop-blur-sm bg-neutral-900/80 z-50">
+      <div className="flex items-center text-neutral-100 space-x-3 cursor-pointer">
+        <Bird className="text-purple-500 w-8 h-8" />
+        <span className="font-mono font-bold lg:text-xl md:text-lg text-md">Prigen</span>
       </div>
 
-      <div className="flex items-center space-x-4">
-        <div className="hidden md:flex items-center space-x-4">
-          
-              <a href="#features" className="block px-4 py-2 text-white">
-                 Features
-              </a>   
-              <Button
-                className="w-20 h-8 rounded-xl hover:bg-zinc-800 hover:text-white"
-                onClick={() => router.push("/signin")}
-              >
-                Log in
-              </Button>
-              <Button
-                className="rounded-xl w-20 h-8 bg-purple-600 hover:bg-purple-700 hover:shadow-md"
-                onClick={() => router.push("/signup")}
-              >
-                Signup
-              </Button>
-
-
+      <div className="flex items-center space-x-6">
+        <div className="hidden md:flex items-center space-x-6">
+          <a href="#features" className="text-neutral-300 hover:text-white transition-colors">
+            Features
+          </a>
+          <a href="#pricing" className="text-neutral-300 hover:text-white transition-colors">
+            Pricing
+          </a>
+          <Button
+            className="px-6 py-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-white transition-all duration-200"
+            onClick={() => router.push("/signin")}
+          >
+            Log in
+          </Button>
+          <Button
+            className="px-6 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-fuchsia-500 text-white hover:opacity-90 transition-all duration-200"
+            onClick={() => router.push("/signup")}
+          >
+            Sign up
+          </Button>
         </div>
 
         <button
