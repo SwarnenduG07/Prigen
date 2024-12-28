@@ -29,14 +29,17 @@ const Features = () => {
 
   return (
     <motion.section 
-      className="py-16 px-4 " 
+      className="relative py-16 px-4" 
       id="features"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6 }}
     >
-      <div className="max-w-6xl mx-auto">
+      {/* Add glass backdrop */}
+      <div className="absolute inset-0 backdrop-blur-sm" />
+      
+      <div className="relative max-w-6xl mx-auto">
         <motion.h2 
           className="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-purple-500 to-fuchsia-500 bg-clip-text text-transparent"
           initial={{ opacity: 0, y: 20 }}
