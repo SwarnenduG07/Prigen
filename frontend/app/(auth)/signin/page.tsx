@@ -13,6 +13,7 @@ const Signin = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
+  console.log('Backend URL:', process.env.NEXT_PUBLIC_API_BASE_URL);
 
   const handleLogin = async (email: string, password: string) => {
     setIsLoading(true);
