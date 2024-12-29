@@ -52,7 +52,7 @@ async fn main() {
         };
 
     let cors = CorsLayer::new()
-        .allow_origin("https://prigen.swarnendu.me/".parse::<HeaderValue>().unwrap())
+        .allow_origin("http://localhost:3000".parse::<HeaderValue>().unwrap())
         .allow_headers([AUTHORIZATION, ACCEPT, CONTENT_TYPE])
         .allow_credentials(true)
         .allow_methods([Method::GET, Method::POST, Method::PUT]);
