@@ -3,6 +3,8 @@ name: Deploy Backend to EC2
 on:
   push:
     branches: [ main ]
+    paths:
+      - 'file-share-rust-backend/**'
 
 jobs:
   deploy:
@@ -19,7 +21,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: ./file-share-rust-backend
           push: true
           tags: swarnendug07/prigen:backend
       
