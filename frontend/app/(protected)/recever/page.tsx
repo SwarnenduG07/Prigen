@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { format } from 'date-fns';
+import { PassThrough } from 'stream';
 
 interface ReceivedFile {
   id: string;
@@ -60,8 +61,7 @@ export default function ReceivePage() {
       const response = await axios.post(
         `${NEXT_PUBLIC_BACKEND_URL}/api/file/retrieve`,
         {
-          shared_id: sharedId,
-          password: '',
+           body: JSON.stringify({  }),
         },
         {
           headers: {
