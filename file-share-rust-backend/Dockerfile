@@ -25,13 +25,11 @@ RUN apt-get update && \
 
 # Copy the built binary and required files from builder
 COPY --from=builder /usr/src/app/target/release/secureshare_backend /app/
-COPY --from=builder /usr/src/app/.env /app/
-COPY --from=builder /usr/src/app/migrations ./migrations
-COPY --from=builder /usr/local/cargo/bin/sqlx /usr/local/bin/
 
 # Switch to non-root user
 USER appuser
 
 EXPOSE 8000
 
-# Command is now specified in docker-compose.yml
+# Add command
+CMD ["/app/secureshare_backend"]
