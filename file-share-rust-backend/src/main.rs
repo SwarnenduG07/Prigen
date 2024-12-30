@@ -51,6 +51,7 @@ async fn main() {
             }
         };
 
+        
     let cors = CorsLayer::new()
         .allow_origin("https://prigen.swarnendu.me".parse::<HeaderValue>().unwrap())
         .allow_headers([AUTHORIZATION, ACCEPT, CONTENT_TYPE])
