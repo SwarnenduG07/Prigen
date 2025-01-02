@@ -8,9 +8,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { format } from 'date-fns';
-import z, { date } from "zod";
+import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ResolverSuccess, useForm } from 'react-hook-form';
+import {  useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { DownloadIcon } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -33,7 +33,7 @@ const passwordSchema  = z.object({
     ),
 })
 
-export default function ReceivePage({data} :{data: ReceivedFile}) {
+export default function ReceivePage() {
   const [receivedFiles, setReceivedFiles] = useState<ReceivedFile[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -44,7 +44,7 @@ export default function ReceivePage({data} :{data: ReceivedFile}) {
     steIsopen(!isopen);
   }
 
-  const onClickHandler = (file: ReceivedFile) => {
+  const onClickHandler = () => {
      handelTouggle();
   }
 
@@ -171,7 +171,7 @@ export default function ReceivePage({data} :{data: ReceivedFile}) {
                     </TableCell>
                     <TableCell>
                     <Button
-                      onClick={() => onClickHandler(file)}
+                      onClick={() => onClickHandler()}
                       className="bg-fuchsia-600 hover:bg-fuchsia-700">
                   <DownloadIcon />
                     </Button>
