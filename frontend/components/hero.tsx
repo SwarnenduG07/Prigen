@@ -31,7 +31,7 @@ function LandingHero():JSX.Element {
         variants={containerVariants}
       >
           <motion.div 
-            className='absolute w-[600px] h-[600px] bg-purple-500/20 rounded-full blur-3xl -z-10'
+            className='absolute w-[600px] h-[600px] bg-purple-500/65 rounded-full blur-3xl -z-10'
             animate={{
               scale: [1, 1.2, 1],
               opacity: [0.2, 0.3, 0.2]
@@ -81,7 +81,7 @@ function LandingHero():JSX.Element {
                 </Button>
                 <Button 
                 onClick={() => router.push("/about")}
-                className='bg-transparent border border-neutral-200 rounded-xl text-lg px-8 py-6 hover:bg-neutral-900 transition-all duration-200'
+                className='bg-transparent border  text-neutral-50 border-neutral-200 rounded-xl text-lg px-8 py-6 hover:bg-neutral-900 transition-all duration-200'
                 >
                   Learn More
                 </Button>
