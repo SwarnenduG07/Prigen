@@ -8,9 +8,17 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { format } from 'date-fns';
+import z, { date } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ResolverSuccess, useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import { DownloadIcon } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 
 interface ReceivedFile {
-  id: string;
+  file_id: string;  
   file_name: string;
   file_size: number;
   sender_email: string;
@@ -19,11 +27,33 @@ interface ReceivedFile {
   password: string;
 }
 
-export default function ReceivePage() {
+const passwordSchema  = z.object({
+    password: z.string().min(6
+      , {message: "Passowrd must be 6 character long"}
+    ),
+})
+
+export default function ReceivePage({data} :{data: ReceivedFile}) {
   const [receivedFiles, setReceivedFiles] = useState<ReceivedFile[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [downloadingId, setDownloadingId] = useState<string | null>(null);
+  const[isopen, steIsopen] = useState(false);
+
+
+  const handelTouggle = () => { 
+    steIsopen(!isopen);
+  }
+
+  const onClickHandler = (file: ReceivedFile) => {
+     handelTouggle();
+  }
+
+  const form = useForm<z.infer<typeof passwordSchema>>({
+    resolver: zodResolver(passwordSchema),
+    defaultValues: {
+      password: '',
+    }
+  })
 
   useEffect(() => {
     fetchReceivedFiles();
@@ -37,6 +67,7 @@ export default function ReceivePage() {
         {
           headers: {
             'Authorization': `Bearer ${token}`,
+            
           }
         }
       );
@@ -50,52 +81,43 @@ export default function ReceivePage() {
     }
   };
 
-  const handleDownload = async (sharedId: string) => {
-    setDownloadingId(sharedId);
+  const handleDownload = async (values: z.infer<typeof passwordSchema>, file: ReceivedFile) => {
     setIsLoading(true);
-    setError(null);
-
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post(
-        `${NEXT_PUBLIC_BACKEND_URL}/api/file/retrieve`,
-        {
-           body: JSON.stringify({  }),
+      const response = await fetch(`${NEXT_PUBLIC_BACKEND_URL}/api/file/retrieve`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type':"application/json"
-          },
-          responseType: 'blob'
-        }
-      );
-
-      // Create download link
-      const blob = new Blob([response.data]);
-      const url = window.URL.createObjectURL(blob)
+        body: JSON.stringify({ shared_id: file.file_id, password: values.password }),
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Download failed');
+      }
+  
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      
-      // Get filename from Content-Disposition header
-      const filename = response.headers['content-disposition']?.split('filename=')[1] || 'downloaded-file';
-      link.download = filename;
+      link.setAttribute('download', file.file_name);
+  
       document.body.appendChild(link);
       link.click();
       link.remove();
-      window.URL.revokeObjectURL(url);
-
+      form.reset();
     } catch (err) {
-      if(axios.isAxiosError(err)) {
-      setError(err.response?.data?.message || 'Download failed');
-      } else {
-        setError("Download failed");
-      }
+      console.error(err);
+      setError('Download failed');
+      toast.error('Download not possible');
     } finally {
       setIsLoading(false);
-      setDownloadingId(null);
     }
   };
+  
 
   const formatFileSize = (bytes: number) => {
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
@@ -134,13 +156,13 @@ export default function ReceivePage() {
                   <TableHead>File Name</TableHead>
                   <TableHead>Size</TableHead>
                   <TableHead>Sender</TableHead>
-                  <TableHead>Date Received</TableHead>
+                  <TableHead>Expireaction Date</TableHead>
                   <TableHead>Action</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody key={receivedFiles.length}>
                 {receivedFiles.map((file) => (
-                  <TableRow key={file.id}>
+                  <TableRow key={file.file_id}>
                     <TableCell>{file.file_name}</TableCell>
                     <TableCell>{formatFileSize(file.file_size)}</TableCell>
                     <TableCell>{file.sender_email}</TableCell>
@@ -148,13 +170,40 @@ export default function ReceivePage() {
                       {format(new Date(file.created_at), 'MMM dd, yyyy')}
                     </TableCell>
                     <TableCell>
-                      <Button
-                        onClick={() => handleDownload(file.shared_id)}
-                        disabled={downloadingId === file.shared_id}
-                        className="bg-fuchsia-600 hover:bg-fuchsia-700"
-                      >
-                        {downloadingId === file.shared_id ? 'Downloading...' : 'Download'}
-                      </Button>
+                    <Button
+                      onClick={() => onClickHandler(file)}
+                      className="bg-fuchsia-600 hover:bg-fuchsia-700">
+                  <DownloadIcon />
+                    </Button>
+                      <Dialog modal open={isopen} onOpenChange={handelTouggle}>
+                        <DialogContent className="bg-neutral-100 text-black">
+                          <DialogHeader>
+                            <DialogTitle>File Password</DialogTitle>
+                          </DialogHeader>
+                          <Separator />
+                          <Form {...form}>
+                            <form
+                              className="space-y-4"
+                              onSubmit={form.handleSubmit((values) => handleDownload(values, file))}
+                            >
+                              <FormField
+                                control={form.control}
+                                name="password"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel>File Password</FormLabel>
+                                    <FormControl>
+                                      <Input {...field} enablePasswordToggle disabled={isLoading} />
+                                    </FormControl>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+                              <Button className="w-full bg-purple-500 rounded-md">Submit</Button>
+                            </form>
+                          </Form>
+                        </DialogContent>
+                      </Dialog>
                     </TableCell>
                   </TableRow>
                 ))}
