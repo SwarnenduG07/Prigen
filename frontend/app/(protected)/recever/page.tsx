@@ -123,10 +123,17 @@ export default function ReceivePage() {
   
 
   const formatFileSize = (bytes: number) => {
+    if (isNaN(bytes) || bytes < 0) return '0 Bytes';
+    if (bytes === 0) return '0 Bytes';
+    
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    if (bytes === 0) return '0 Byte';
-    const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)).toString());
-    return Math.round(bytes / Math.pow(1024, i)) + ' ' + sizes[i];
+    const i = Math.floor(Math.log(bytes) / Math.log(1024));
+    
+    // Check if i is within valid range
+    if (i < 0 || i >= sizes.length) return '0 Bytes';
+    
+    const size = bytes / Math.pow(1024, i);
+    return Math.round(size * 100) / 100 + ' ' + sizes[i];
   };
 
   const containerVariants = {
