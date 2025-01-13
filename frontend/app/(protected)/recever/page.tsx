@@ -16,6 +16,7 @@ import { DownloadIcon } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { motion } from 'framer-motion';
 
 interface ReceivedFile {
   file_id: string;  
@@ -37,11 +38,11 @@ export default function ReceivePage() {
   const [receivedFiles, setReceivedFiles] = useState<ReceivedFile[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const[isopen, steIsopen] = useState(false);
+  const[isopen, setOpen] = useState(false);
 
 
   const handelTouggle = () => { 
-    steIsopen(!isopen);
+    setOpen(!isopen);
   }
 
   const onClickHandler = () => {
@@ -96,7 +97,8 @@ export default function ReceivePage() {
   
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Download failed');
+        console.log(errorData, "errorData")
+        throw new Error(errorData.message || 'Failed to retrieve file');
       }
   
       const blob = await response.blob();
@@ -115,6 +117,7 @@ export default function ReceivePage() {
       toast.error('Download not possible');
     } finally {
       setIsLoading(false);
+      setOpen(false);
     }
   };
   
@@ -126,93 +129,166 @@ export default function ReceivePage() {
     return Math.round(bytes / Math.pow(1024, i)) + ' ' + sizes[i];
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.6 }
+    }
+  };
+
+  const blobVariants = {
+    animate: {
+      scale: [1, 1.1, 1],
+      transition: {
+        duration: 5,
+        repeat: Infinity,
+        repeatType: "reverse" as const
+      }
+    }
+  };
+
   return (
-    <main className="container mx-auto p-4">
-      <div className='w-[590px] h-[400px]  bg-[#d82fc4] dark:bg-emerald-700 rounded-[100%] absolute z-1 top-[60%] left-[55%] dark:left-[50%] translate-x-[-50%] translate-y-[-50%] blur-[90px] flex items-center text-center justify-center '></div>
-      <div className='w-[300px] h-[300px]  bg-[#f22828] dark:bg-yellow-500  rounded-[100%] absolute z-1 top-[60%] left-[45%] dark:left-[50%] translate-x-[-50%] translate-y-[-50%] blur-[90px] flex items-center text-center justify-center '></div>
+    <main className="container mx-auto p-4 overflow-hidden bg-transparent">
+      <motion.div 
+        className='w-[590px] h-[400px] bg-blue-700/30 rounded-[100%] absolute z-1 top-[60%] left-[55%] dark:left-[50%] translate-x-[-50%] translate-y-[-50%] blur-[90px]'
+        variants={blobVariants}
+        animate="animate"
+      />
+      <motion.div 
+        className='w-[300px] h-[300px] bg-purple-700/30 rounded-[100%] absolute z-1 top-[60%] left-[45%] dark:left-[50%] translate-x-[-50%] translate-y-[-50%] blur-[90px]'
+        variants={blobVariants}
+        animate="animate"
+      />
       <Topbar />
-      <Card className="mt-8">
-        <CardHeader>
-          <CardTitle>Received Files</CardTitle>
-        </CardHeader>
-        <Separator />
-        <CardContent>
-          {isLoading ? (
-            <div className='text-center text-gray-700'>
-                ...Loading
-            </div>
-          ) : error ? (
-            <div className='text-center text-red-500'>
-              {error}
-            </div>
-          ): receivedFiles.length === 0 ? (
-            <div className="text-center py-8">
-              <p className="text-gray-500">No files have been shared with you yet</p>
-            </div>
-          ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>File Name</TableHead>
-                  <TableHead>Size</TableHead>
-                  <TableHead>Sender</TableHead>
-                  <TableHead>Expireaction Date</TableHead>
-                  <TableHead>Action</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody key={receivedFiles.length}>
-                {receivedFiles.map((file) => (
-                  <TableRow key={file.file_id}>
-                    <TableCell>{file.file_name}</TableCell>
-                    <TableCell>{formatFileSize(file.file_size)}</TableCell>
-                    <TableCell>{file.sender_email}</TableCell>
-                    <TableCell>
-                      {format(new Date(file.created_at), 'MMM dd, yyyy')}
-                    </TableCell>
-                    <TableCell>
-                    <Button
-                      onClick={() => onClickHandler()}
-                      className="bg-fuchsia-600 hover:bg-fuchsia-700">
-                  <DownloadIcon />
-                    </Button>
-                      <Dialog modal open={isopen} onOpenChange={handelTouggle}>
-                        <DialogContent className="bg-neutral-100 text-black">
-                          <DialogHeader>
-                            <DialogTitle>File Password</DialogTitle>
-                          </DialogHeader>
-                          <Separator />
-                          <Form {...form}>
-                            <form
-                              className="space-y-4"
-                              onSubmit={form.handleSubmit((values) => handleDownload(values, file))}
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <Card className="mt-8 backdrop-blur-sm bg-gray-800/5 border border-gray-700/20 shadow-xl hover:shadow-2xl transition-shadow duration-300">
+          <CardHeader className="border-b border-gray-700/20">
+            <motion.div 
+              whileHover={{ scale: 1.02 }}
+              className="flex items-center justify-between"
+            >
+              <CardTitle className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
+                Received Files
+              </CardTitle>
+            </motion.div>
+          </CardHeader>
+          <CardContent className="mt-4 p-6">
+            {isLoading ? (
+              <motion.div 
+                className='text-center text-gray-200'
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+              >
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                >
+                  ⟳
+                </motion.div>
+              </motion.div>
+            ) : error ? (
+              <motion.div 
+                className='text-center text-red-500'
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+              >
+                {error}
+              </motion.div>
+            ) : receivedFiles.length === 0 ? (
+              <motion.div 
+                className="text-center py-8"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+              >
+                <p className="text-gray-300">No files have been shared with you yet</p>
+              </motion.div>
+            ) : (
+              <div className="rounded-lg overflow-hidden border border-gray-700/20 backdrop-blur-md">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="bg-gray-800/5">
+                      <TableHead className="font-bold text-gray-100">File Name</TableHead>
+                      <TableHead className="font-bold text-gray-100">Size</TableHead>
+                      <TableHead className="font-bold text-gray-100">Sender</TableHead>
+                      <TableHead className="font-bold text-gray-100">Expiration Date</TableHead>
+                      <TableHead className="font-bold text-gray-100">Action</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody key={receivedFiles.length}>
+                    {receivedFiles.map((file, index) => (
+                      <motion.tr
+                        key={file.file_id}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        className="hover:bg-gray-700/10 transition-colors duration-150 text-gray-100"
+                      >
+                        <TableCell className="font-medium text-gray-100">{file.file_name}</TableCell>
+                        <TableCell className="text-gray-100">{formatFileSize(file.file_size)}</TableCell>
+                        <TableCell className="text-gray-100">{file.sender_email}</TableCell>
+                        <TableCell className="text-gray-100">
+                          {format(new Date(file.created_at), 'MMM dd, yyyy')}
+                        </TableCell>
+                        <TableCell>
+                          <motion.div 
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                          >
+                            <Button
+                              onClick={() => onClickHandler()}
+                              className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white shadow-md hover:shadow-lg transition-all duration-200"
                             >
-                              <FormField
-                                control={form.control}
-                                name="password"
-                                render={({ field }) => (
-                                  <FormItem>
-                                    <FormLabel>File Password</FormLabel>
-                                    <FormControl>
-                                      <Input {...field} enablePasswordToggle disabled={isLoading} />
-                                    </FormControl>
-                                    <FormMessage />
-                                  </FormItem>
-                                )}
-                              />
-                              <Button className="w-full bg-purple-500 rounded-md">Submit</Button>
-                            </form>
-                          </Form>
-                        </DialogContent>
-                      </Dialog>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          )}
-          {error && <div className="mt-4 text-red-500 text-sm">{error}</div>}
-        </CardContent>
-      </Card>
+                              <DownloadIcon className="mr-2 h-4 w-4" />
+                              Download
+                            </Button>
+                          </motion.div>
+                          <Dialog modal open={isopen} onOpenChange={handelTouggle}>
+                            <DialogContent className="bg-gray-800/80 backdrop-blur-md border border-gray-700/20">
+                              <DialogHeader>
+                                <DialogTitle className="text-xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
+                                  File Password
+                                </DialogTitle>
+                              </DialogHeader>
+                              <Separator className="bg-gray-700/50" />
+                              <Form {...form}>
+                                <form
+                                  className="space-y-4"
+                                  onSubmit={form.handleSubmit((values) => handleDownload(values, file))}
+                                >
+                                  <FormField
+                                    control={form.control}
+                                    name="password"
+                                    render={({ field }) => (
+                                      <FormItem>
+                                        <FormLabel className="text-gray-100">File Password</FormLabel>
+                                        <FormControl>
+                                          <Input {...field} enablePasswordToggle disabled={isLoading} className="text-gray-100" />
+                                        </FormControl>
+                                        <FormMessage className="text-red-400" />
+                                      </FormItem>
+                                    )}
+                                  />
+                                  <Button className="w-full bg-purple-500 rounded-md">Submit</Button>
+                                </form>
+                              </Form>
+                            </DialogContent>
+                          </Dialog>
+                        </TableCell>
+                      </motion.tr>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </motion.div>
     </main>
   );
 }
