@@ -23,6 +23,7 @@ pub fn create_router(app_state: Arc<AppState>) -> Router {
             get_file_list_handler()
             .layer(middleware::from_fn(auth)) 
         )
+        .nest("/health", health_handler())
         .layer(TraceLayer::new_for_http())
         .layer(Extension(app_state));
 
