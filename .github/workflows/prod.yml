@@ -37,6 +37,7 @@ jobs:
             docker rm prigen-backend || true
             docker run -d \
               --name prigen-backend \
+              --restart always \
               -p 8000:8000 \
               -e DATABASE_URL="${{ secrets.DATABASE_URL }}" \
               -e JWT_SECRET_KEY="${{ secrets.JWT_SECRET_KEY }}" \
