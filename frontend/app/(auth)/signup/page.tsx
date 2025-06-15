@@ -69,16 +69,7 @@ const Signup = () => {
 
         <div className="mt-8 text-white">
           <h1 className="text-2xl font-semibold font-mono text-center">Create your Free Account</h1>
-          <div className="mt-5 flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-            <Button className="font-semibold rounded-xl px-9 bg-transparent border border-gray-700 w-full sm:w-auto">
-              Sign up with Google
-            </Button>
-            <Button className="font-semibold rounded-xl px-9 bg-transparent border border-gray-700 w-full sm:w-auto">
-              Sign up with Apple
-            </Button>
-          </div>
-
-
+          
           {error && (
             <div className="text-red-600 text-center mt-4">
               <p>{error}</p>

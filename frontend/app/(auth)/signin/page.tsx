@@ -53,14 +53,6 @@ const Signin = () => {
 
         <div className="mt-8 text-white">
           <h1 className="text-2xl font-semibold font-mono text-center">Login To Your Account</h1>
-          <div className="mt-5 flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-            <Button className="font-semibold rounded-xl px-9 bg-transparent border border-gray-700 w-full sm:w-auto">
-              Sign in with Google
-            </Button>
-            <Button className="font-semibold rounded-xl px-9 bg-transparent border border-gray-700 w-full sm:w-auto">
-              Sign in with Apple
-            </Button>
-          </div>
 
           <form
             className="space-y-4 pt-6 font-mono mt-8"

@@ -2,9 +2,17 @@
 import { Button } from './ui/button'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
+import { useEffect, useState } from 'react'
+import { Bird } from 'lucide-react'
 
-function LandingHero():JSX.Element {
+function LandingHero(): JSX.Element {
     const router = useRouter();
+    const [isMounted, setIsMounted] = useState(false);
+    
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
     
     const containerVariants = {
       hidden: { opacity: 0 },
@@ -19,55 +27,73 @@ function LandingHero():JSX.Element {
       visible: { 
         opacity: 1, 
         y: 0,
-        transition: { duration: 0.5 }
+        transition: { duration: 0.3 }
       }
+    }
+
+    // Don't render until mounted to avoid hydration issues
+    if (!isMounted) {
+        return (
+            <div className='relative flex justify-center pt-28 min-h-screen'>
+                <div className='text-center max-w-4xl mx-auto px-4'> 
+                    <h1 className='lg:text-7xl md:text-6xl sm:text-5xl text-4xl font-thin bg-gradient-to-br from-fuchsia-300 to-purple-600 bg-clip-text text-transparent leading-tight'>
+                        Share Your Files With <span className='font-bold'>Prigen</span>
+                    </h1>
+                </div>
+            </div>
+        );
     }
 
     return (
       <motion.div 
-        className='relative flex justify-center pt-28'
+        className='relative flex justify-center pt-28 min-h-screen'
         initial="hidden"
         animate="visible"
         variants={containerVariants}
       >
+          {/* Subtle dark purple hole background */}
           <motion.div 
-            className='absolute w-[600px] h-[600px] bg-purple-500/65 rounded-full blur-3xl -z-10'
-            animate={{
-              scale: [1, 1.2, 1],
-              opacity: [0.2, 0.3, 0.2]
-            }}
+            className='absolute inset-0 flex items-center justify-center'
+            initial={{ rotate: 0 }}
+            animate={{ rotate: 360 }}
             transition={{
-              duration: 8,
+              duration: 30,
               repeat: Infinity,
-              ease: "easeInOut"
+              ease: "linear"
             }}
-          />
-          <motion.div 
-            className='absolute w-[500px] h-[500px] bg-emerald-500/20 rounded-full blur-3xl -z-10 translate-x-1/2'
-            animate={{
-              scale: [1.2, 1, 1.2],
-              opacity: [0.2, 0.3, 0.2]
-            }}
-            transition={{
-              duration: 8,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          />
+            key="spinning-hole"
+          >
+            <div className='w-[800px] h-[800px] relative'>
+              {/* Very subtle outer ring */}
+              <div className='absolute inset-0 rounded-full bg-gradient-to-r from-purple-900/10 via-purple-800/15 to-purple-900/10 blur-xl' />
+              
+              {/* Middle ring - darker and more subtle */}
+              <div className='absolute inset-16 rounded-full bg-gradient-to-r from-purple-900/8 via-purple-700/12 to-purple-900/8' />
+              
+              {/* Inner ring with very light glow */}
+              <div className='absolute inset-32 rounded-full bg-gradient-to-r from-purple-800/15 via-purple-600/20 to-purple-800/15 blur-lg' />
+              
+              {/* Center hole - almost black */}
+              <div className='absolute inset-48 rounded-full bg-gradient-to-r from-black via-neutral-950 to-black' />
+              
+              {/* Very subtle inner glow */}
+              <div className='absolute inset-56 rounded-full bg-purple-900/8 blur-xl' />
+            </div>
+          </motion.div>
           
-          <div className='text-center'>
+          <div className='text-center max-w-4xl mx-auto px-4 relative z-10'> 
              <motion.h1 
                variants={itemVariants}
-               className='lg:text-7xl md:text-7xl text-4xl font-thin bg-gradient-to-br from-fuchsia-300 to-purple-600 bg-clip-text text-transparent'
+               className='lg:text-7xl md:text-6xl sm:text-5xl text-4xl font-thin bg-gradient-to-br from-fuchsia-300 to-purple-600 bg-clip-text text-transparent leading-tight drop-shadow-lg'
              >
                 Share Your Files With <span className='font-bold'>Prigen</span>
              </motion.h1>
-             <motion.h1 
+             <motion.p 
                variants={itemVariants}
-               className='text-gray-400 text-2xl pt-7 max-w-2xl mx-auto leading-normal'
+               className='text-gray-300 lg:text-2xl md:text-xl text-lg pt-16 max-w-2xl mx-auto leading-relaxed drop-shadow-md'
              >
                 Meet the system for modern File Sharing. Blazing Fast Speed, No issues, Large Size, End-to-End Encrypted
-             </motion.h1>
+             </motion.p>
 
              <motion.div 
                variants={itemVariants}
@@ -81,10 +107,13 @@ function LandingHero():JSX.Element {
                 </Button>
                 <Button 
                 onClick={() => router.push("/about")}
-                className='bg-transparent border  text-neutral-50 border-neutral-200 rounded-xl text-lg px-8 py-6 hover:bg-neutral-900 transition-all duration-200'
+                className='bg-transparent border text-neutral-50 border-neutral-200 rounded-xl text-lg px-8 py-6 hover:bg-neutral-900 transition-all duration-200'
                 >
                   Learn More
                 </Button>
+                <div className="flex justify-center mt-2">
+             <Bird className="text-purple-500 w-36 h-36" />
+           </div>
              </motion.div>
           </div>        
       </motion.div>

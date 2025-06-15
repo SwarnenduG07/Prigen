@@ -1,14 +1,24 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 import { Bird, Menu } from "lucide-react";
-import { signIn } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export function LandingNavBar(): JSX.Element {
   const router = useRouter();
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (isMobileMenuOpen && !(event.target as Element).closest('.mobile-menu-container')) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isMobileMenuOpen]);
 
   return (
     <motion.nav 
@@ -58,7 +68,7 @@ export function LandingNavBar(): JSX.Element {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div 
-            className="absolute top-16 right-4 bg-gray-800 w-48 py-2 rounded-lg shadow-lg md:hidden"
+            className="mobile-menu-container absolute top-16 right-4 bg-gray-800 w-48 py-2 rounded-lg shadow-lg md:hidden"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
@@ -69,9 +79,9 @@ export function LandingNavBar(): JSX.Element {
             </a>
             <div className="px-4 py-2 space-y-2">
               <Button
-                className="w-full h-7 text-sm font-semibold delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-purple-500 transition duration-200 ease-in-out"
+                className="w-full h-7 text-sm font-semibold hover:bg-purple-500 transition duration-200 ease-in-out"
                 variant="outline"
-                onClick={() => signIn()}
+                onClick={() => router.push("/signin")} // Fix: Use router instead of signIn
               >
                 Login
               </Button>
