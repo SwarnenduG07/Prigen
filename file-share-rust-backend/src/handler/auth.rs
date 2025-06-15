@@ -13,6 +13,7 @@ pub fn auth_handler() -> Router {
 }
 
 
+
 pub async fn register(
     Extension(app_state): Extension<Arc<AppState>>,
     Json(body): Json<RegisterUserDto>

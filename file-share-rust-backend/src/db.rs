@@ -14,6 +14,11 @@ impl DBClient {
     pub fn new(pool: Pool<Postgres>) -> Self {
         DBClient { pool }
     }
+
+    pub async fn execute(&self, query: &str) -> Result<(), sqlx::Error> {
+        sqlx::query(query).execute(&self.pool).await?;
+        Ok(())
+    }
 }
 
 #[async_trait]
