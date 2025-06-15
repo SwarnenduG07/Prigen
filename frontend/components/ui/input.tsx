@@ -1,9 +1,10 @@
-import * as React from "react"
+import * as React from "react";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 import { Eye, EyeOff } from "lucide-react";
 
-export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
   enablePasswordToggle?: boolean;
 }
 
@@ -11,11 +12,15 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, enablePasswordToggle, ...props }, ref) => {
     const [showPassword, setShowPassword] = React.useState(false);
 
-    const currentType = enablePasswordToggle ? ( showPassword ? 'text': 'password' ): type;
+    const currentType = enablePasswordToggle
+      ? showPassword
+        ? "text"
+        : "password"
+      : type;
 
     const handleTooglePassword = () => {
-      setShowPassword((prev) => !prev);
-    }
+      setShowPassword(prev => !prev);
+    };
 
     return (
       <div className="relative w-full">
@@ -28,21 +33,19 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           {...props}
         />
-        {
-          enablePasswordToggle && (
-            <button
-              type="button"
-              onClick={handleTooglePassword}
-              className="absolute inset-y-0 right-3 flex items-center text-sm focus:outline-none"
-            >
-              {showPassword ? <Eye /> : <EyeOff />}
-            </button>
-          )
-        }
+        {enablePasswordToggle && (
+          <button
+            type="button"
+            onClick={handleTooglePassword}
+            className="absolute inset-y-0 right-3 flex items-center text-sm focus:outline-none"
+          >
+            {showPassword ? <Eye /> : <EyeOff />}
+          </button>
+        )}
       </div>
-    )
+    );
   }
-)
-Input.displayName = "Input"
+);
+Input.displayName = "Input";
 
-export { Input }
+export { Input };

@@ -1,4 +1,4 @@
-"use client"; 
+"use client";
 import FileHistory from "@/components/filehistory";
 import Topbar from "@/components/topbar";
 import InteractiveHoverButton from "@/components/ui/interactive-hover-button";
@@ -9,8 +9,10 @@ import { motion } from "framer-motion";
 export default function Dashboard() {
   return (
     <div className="min-h-screen relative">
-      <div className="fixed w-[600px] h-[600px] bg-gradient-to-br from-fuchsia-600/30 to-purple-600/30 rounded-full 
-        blur-[100px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10" />
+      <div
+        className="fixed w-[600px] h-[600px] bg-gradient-to-br from-fuchsia-600/30 to-purple-600/30 rounded-full 
+        blur-[100px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10"
+      />
 
       <div>
         <Topbar />
@@ -18,7 +20,7 @@ export default function Dashboard() {
 
       <main className="container mx-auto px-4 relative z-10">
         <div className="flex flex-col items-center justify-center mt-16 space-y-6">
-          <motion.h1 
+          <motion.h1
             className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-fuchsia-300 to-purple-600 
               bg-clip-text text-transparent text-center"
             initial={{ opacity: 0, y: 20 }}
@@ -28,7 +30,7 @@ export default function Dashboard() {
             Share & Receive Files Securely
           </motion.h1>
 
-          <motion.p 
+          <motion.p
             className="text-xl text-gray-400 max-w-2xl text-center"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -52,10 +54,10 @@ export default function Dashboard() {
                 <InteractiveHoverButton
                   className="px-5 md:w-auto bg-gradient-to-r from-purple-500 to-fuchsia-500 
                     hover:opacity-90 transition-all duration-200"
-                  text="Send File" 
+                  text="Send File"
                 />
               </Link>
-              
+
               <Link href="/recever">
                 <InteractiveHoverButton
                   className="px-6 md:w-auto bg-gradient-to-r from-fuchsia-500 to-purple-500
