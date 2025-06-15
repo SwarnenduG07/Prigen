@@ -6,7 +6,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@radix-ui/react-dropdown-menu";
-import {  GithubIcon, User, Dot, LogOut, BirdIcon } from "lucide-react";
+import { GithubIcon, User, Dot, LogOut, BirdIcon } from "lucide-react";
 import React from "react";
 import { useRouter } from "next/navigation";
 import ThemeToggle from "./dark";
@@ -16,7 +16,7 @@ const Topbar = () => {
 
   const logoutUser = () => {
     // Clear authentication tokens
-  localStorage.removeItem("token");
+    localStorage.removeItem("token");
     sessionStorage.clear();
 
     router.push("/signin");
@@ -32,14 +32,19 @@ const Topbar = () => {
               className="border-neutral-300 text-emerald-500"
               size={15}
             />
-            <span className="font-semibold text-sm dark:text-white">Prigen</span>
+            <span className="font-semibold text-sm dark:text-white">
+              Prigen
+            </span>
           </div>
           <div className="ml-auto flex items-center font-bold text-lg text-purple-600 dark:text-purple-400">
             <ThemeToggle />
           </div>
         </div>
         <div className="flex gap-8">
-          <a href="#" className="text-gray-500 dark:text-gray-300 font-medium"></a>
+          <a
+            href="#"
+            className="text-gray-500 dark:text-gray-300 font-medium"
+          ></a>
           <div className="bg-white dark:bg-gray-700 border-r border-gray-400 dark:border-gray-600 flex items-center justify-between gap-5 rounded-lg px-5 py-2 text-gray-700 dark:text-gray-300 shadow hover:shadow-md">
             <a
               href="https://github.com/swarnenduG07/Prigen"

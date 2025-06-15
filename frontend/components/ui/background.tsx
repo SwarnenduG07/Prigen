@@ -1,24 +1,24 @@
-"use client"
-import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
+"use client";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 export const Background = () => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY })
-    }
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
 
-    window.addEventListener('mousemove', handleMouseMove)
-    return () => window.removeEventListener('mousemove', handleMouseMove)
-  }, [])
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
 
   return (
     <div className="fixed inset-0 -z-50 overflow-hidden">
       {/* Dark gradient base */}
       <div className="absolute inset-0 bg-gradient-to-b from-black via-neutral-950 to-neutral-900" />
-      
+
       {/* Animated gradient meshes */}
       <div className="absolute inset-0 opacity-30">
         <div className="absolute inset-0 bg-[radial-gradient(circle_500px_at_50%_200px,#3B82F6,transparent)]" />
@@ -65,10 +65,10 @@ export const Background = () => {
       {/* Gradient borders */}
       <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-purple-500/20 to-transparent" />
       <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-blue-500/20 to-transparent" />
-      
+
       {/* Glowing corners */}
       <div className="absolute top-0 left-0 w-48 h-48 bg-purple-500/10 rounded-full blur-[100px]" />
       <div className="absolute bottom-0 right-0 w-48 h-48 bg-blue-500/10 rounded-full blur-[100px]" />
     </div>
-  )
-}
+  );
+};

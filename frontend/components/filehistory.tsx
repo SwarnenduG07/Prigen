@@ -1,7 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "./ui/table";
 import axios from "axios";
 import { format } from "date-fns";
 import { NEXT_PUBLIC_BACKEND_URL } from "@/config";
@@ -72,26 +79,47 @@ export default function FileHistory() {
               </div>
             ) : receivedFiles.length === 0 ? (
               <div className="flex justify-center py-8">
-                <p className="text-gray-500 dark:text-gray-400">No files have been shared by you yet</p>
+                <p className="text-gray-500 dark:text-gray-400">
+                  No files have been shared by you yet
+                </p>
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="font-semibold text-gray-700 dark:text-gray-300 text-left">File Name</TableHead>
-                      <TableHead className="font-semibold text-gray-700 dark:text-gray-300 text-center">Size</TableHead>
-                      <TableHead className="font-semibold text-gray-700 dark:text-gray-300 text-left">Recipient</TableHead>
-                      <TableHead className="font-semibold text-gray-700 dark:text-gray-300 text-center">Date Shared</TableHead>
+                      <TableHead className="font-semibold text-gray-700 dark:text-gray-300 text-left">
+                        File Name
+                      </TableHead>
+                      <TableHead className="font-semibold text-gray-700 dark:text-gray-300 text-center">
+                        Size
+                      </TableHead>
+                      <TableHead className="font-semibold text-gray-700 dark:text-gray-300 text-left">
+                        Recipient
+                      </TableHead>
+                      <TableHead className="font-semibold text-gray-700 dark:text-gray-300 text-center">
+                        Date Shared
+                      </TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {receivedFiles.map((file) => (
-                      <TableRow key={file.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                        <TableCell className="text-left">{file.file_name}</TableCell>
-                        <TableCell className="text-center">{filesize(file.file_size)}</TableCell>
-                        <TableCell className="text-left">{file.sender_email}</TableCell>
-                        <TableCell className="text-center">{format(new Date(file.created_at), "MMM dd, yyyy")}</TableCell>
+                    {receivedFiles.map(file => (
+                      <TableRow
+                        key={file.id}
+                        className="hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                      >
+                        <TableCell className="text-left">
+                          {file.file_name}
+                        </TableCell>
+                        <TableCell className="text-center">
+                          {filesize(file.file_size)}
+                        </TableCell>
+                        <TableCell className="text-left">
+                          {file.sender_email}
+                        </TableCell>
+                        <TableCell className="text-center">
+                          {format(new Date(file.created_at), "MMM dd, yyyy")}
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

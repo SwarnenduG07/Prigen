@@ -14,7 +14,7 @@ const ThemeToggle = () => {
     setTheme(theme === "dark" ? "light" : "dark");
   };
 
-  if (!mounted) return null; 
+  if (!mounted) return null;
 
   return (
     <Switch onClick={toggleTheme} className="dark:bg-emerald-400">
